@@ -5,8 +5,12 @@ include '../config/db.php';
 $messageError = '';
 
 if (isset($_POST['register'])) {
- 
-
+    $firstname = htmlspecialchars($_POST['firstname']);
+    $lastname  = htmlspecialchars($_POST['lastname']);
+    $email     = htmlspecialchars($_POST['email']);
+    $password  = $_POST['password'];
+    $confirm   = $_POST['confirm_password'];
+    
 }
 
 
