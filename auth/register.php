@@ -54,7 +54,7 @@ if (isset($_POST['register'])) {
 ?>
 
 <!DOCTYPE html>
-<html lang="en">
+<html lang="en" class="h-100">
 
 <head>
     <meta charset="UTF-8">
@@ -63,9 +63,9 @@ if (isset($_POST['register'])) {
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
 </head>
 
-<body class="bg-body-secondary">
-    <div class="container py-4 py-md-5">
-        <div class="row justify-content-center align-items-center min-vh-100">
+<body class="bg-body-secondary vh-100 h-100 m-0 d-flex align-items-center">
+    <div class="container h-100">
+        <div class="row justify-content-center align-items-center w-100 h-100">
             <div class="col-12 col-lg-10 col-xl-9">
                 <div class="card border-0 shadow-lg overflow-hidden">
                     <div class="row g-0">
