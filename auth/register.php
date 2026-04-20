@@ -16,7 +16,8 @@ if (isset($_POST['register'])) {
     }
 
     if($password !== $confirm) {
-     }
+        $messageError = "password and confirm password not match";
+    }
    
     
 }
