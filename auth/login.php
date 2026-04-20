@@ -11,6 +11,12 @@ if(isset($_SESSION['messageError'])) {
 if (isset($_POST['login'])) {
     $email = htmlspecialchars($_POST['email']);
     $password = $_POST['password'];
+
+    if(empty($email) || empty($password)) {
+        $_SESSION['messageError'] = "email and password required";
+        header("location: login.php");
+        exit;
+    }
 }
 
 
