@@ -30,15 +30,15 @@ if (isset($_POST['login'])) {
             'lastname' => $user->lastname,
             'email' => $user->email,
             'role_id' => $user->role_id
-
         ];
 
-    
+        if($user->role_id == 1) {
+            header("location: ../admin/dashboard.php");
+            exit;
+        } 
+    }
 }
-
-
 ?>
-
 
 <!DOCTYPE html>
 <html lang="en" class="h-100">
