@@ -3,6 +3,13 @@ session_start();
 include '../config/db.php';
 
 $messageError = '';
+$messageSuccess = '';
+
+if(isset($_SESSION['messageError'])){
+  $messageError = $_SESSION['messageError'];
+  unset($_SESSION['messageError']);
+}
+
 
 if (isset($_POST['register'])) {
     $firstname = htmlspecialchars($_POST['firstname']);
@@ -18,6 +25,7 @@ if (isset($_POST['register'])) {
     if($password !== $confirm) {
         $messageError = "password and confirm password not match";
     }
+
    
     
 }
