@@ -35,8 +35,12 @@ if (isset($_POST['login'])) {
         if($user->role_id == 1) {
             header("location: ../admin/dashboard.php");
             exit;
-        } 
-    }
+        } else if($user->role_id == 2) {
+            header("location: ../student/dashboard.php");
+            exit;
+        }
+
+    }  
 }
 ?>
 
