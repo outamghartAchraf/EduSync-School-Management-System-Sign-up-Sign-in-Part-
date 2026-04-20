@@ -4,9 +4,14 @@ include '../config/db.php';
 
 if (!isset($_SESSION['user']['id'])) {
     header("location: ../auth/login.php");
- 
+    exit;
 }
 
+$userId = $_SESSION['user']['id'];
+
+$stmt = $pdo->prepare("SELECT * FROM users WHERE id = ?");
+$stmt->execute([$userId]);
+$user = $stmt->fetch(PDO::FETCH_OBJ);
 
  
 ?>
