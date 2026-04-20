@@ -17,6 +17,23 @@ if (isset($_POST['login'])) {
         header("location: login.php");
         exit;
     }
+
+    $sqlState = $pdo->prepare("SELECT * FROM users WHERE email = ?");
+    $sqlState->execute([$email]);
+    $user = $sqlState->fetch(PDO::FETCH_OBJ);
+     
+    if($user && password_verify($password, $user->password)) {
+
+        $_SESSION['user'] = [
+            'id' => $user->id,
+            'firstname' => $user->firstname,
+            'lastname' => $user->lastname,
+            'email' => $user->email,
+            'role_id' => $user->role_id
+
+        ];
+
+    
 }
 
 
