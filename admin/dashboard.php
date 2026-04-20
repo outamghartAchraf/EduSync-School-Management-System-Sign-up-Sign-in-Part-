@@ -2,295 +2,176 @@
 session_start();
 include '../config/db.php';
 
- 
-if (!isset($_SESSION['user_id'])) {
-    header('location: ../auth/login.php');
+if (!isset($_SESSION['user']['id'])) {
+    header("location: ../auth/login.php");
     exit;
 }
 
-// Fetch admin info
-$userId = $_SESSION['user_id'];
-$stmt = $pdo->prepare("SELECT * FROM users WHERE id = ?");
-$stmt->execute([$userId]);
-$admin = $stmt->fetch(PDO::FETCH_OBJ);
+$sqlState = $pdo->query("SELECT 
+(SELECT COUNT(*) FROM students) AS total_students,
+(SELECT COUNT(*) FROM users JOIN roles ON users.role_id = roles.id WHERE roles.role_name = 'Professor') AS total_teachers,
+(SELECT COUNT(*) FROM courses) AS total_courses,
+(SELECT COUNT(*) FROM classes) AS total_classes
+");
+$stats = $sqlState->fetch(PDO::FETCH_OBJ);
 
-// Fetch system stats
-$totalUsers = $pdo->query("SELECT COUNT(*) as count FROM users")->fetch(PDO::FETCH_OBJ)->count;
-$totalStudents = $pdo->query("SELECT COUNT(*) as count FROM users WHERE role_id = 3")->fetch(PDO::FETCH_OBJ)->count;
-$totalTeachers = $pdo->query("SELECT COUNT(*) as count FROM users WHERE role_id = 2")->fetch(PDO::FETCH_OBJ)->count;
+$students = $pdo->query("SELECT students.id, users.firstname, users.lastname, classes.name AS class_name FROM students JOIN users ON students.user_id = users.id JOIN classes ON students.class_id = classes.id ORDER BY students.id DESC LIMIT 5")->fetchAll(PDO::FETCH_OBJ);
+
+$courses = $pdo->query("SELECT id, title, total_hours FROM courses ORDER BY id DESC LIMIT 5")->fetchAll(PDO::FETCH_OBJ);
 ?>
 
 <!DOCTYPE html>
-<html lang="en" class="h-100">
+<html lang="en">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Admin Dashboard - EduSync</title>
-    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
-    <link href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.0/font/bootstrap-icons.css" rel="stylesheet">
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>EduSync Dashboard</title>
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.min.css" rel="stylesheet">
+  
+  <style>
+    body { min-height: 100vh; display: flex; flex-direction: column; }
+     .sidebar {
+      min-width: 240px;
+      max-width: 240px;
+      min-height: 100vh;
+      background: #212529;
+      color: white;
+      position: fixed;
+    }
+    .sidebar .nav-link { color: rgba(255,255,255,0.8); margin-bottom: 5px; }
+    .sidebar .nav-link:hover, .sidebar .nav-link.active { color: white; background: #343a40; border-radius: 5px; }
+    
+     .main-content { margin-left: 240px; width: 100%; }
+    
+    @media (max-width: 768px) {
+      .sidebar { position: relative; min-width: 100%; min-height: auto; }
+      .main-content { margin-left: 0; }
+    }
+  </style>
 </head>
 
-<body class="bg-body-secondary h-100">
-    <nav class="navbar navbar-expand-lg navbar-dark bg-danger sticky-top">
-        <div class="container-fluid">
-            <a class="navbar-brand fw-bold" href="#">
-                <i class="bi bi-shield-lock"></i> EduSync Admin
-            </a>
-            <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav">
-                <span class="navbar-toggler-icon"></span>
-            </button>
-            <div class="collapse navbar-collapse" id="navbarNav">
-                <ul class="navbar-nav ms-auto">
-                    <li class="nav-item">
-                        <a class="nav-link active" href="#dashboard">Dashboard</a>
-                    </li>
-                    <li class="nav-item">
-                        <a class="nav-link" href="#users">Users</a>
-                    </li>
-                    <li class="nav-item">
-                        <a class="nav-link" href="#reports">Reports</a>
-                    </li>
-                    <li class="nav-item">
-                        <a class="nav-link" href="#settings">Settings</a>
-                    </li>
-                    <li class="nav-item dropdown">
-                        <a class="nav-link dropdown-toggle" href="#" role="button" data-bs-toggle="dropdown">
-                            <i class="bi bi-person-circle"></i> <?= htmlspecialchars($admin->firstname ?? 'Admin') ?>
-                        </a>
-                        <ul class="dropdown-menu dropdown-menu-end">
-                            <li><a class="dropdown-item" href="#profile">Profile</a></li>
-                            <li><a class="dropdown-item" href="#settings">Admin Settings</a></li>
-                            <li><hr class="dropdown-divider"></li>
-                            <li><a class="dropdown-item" href="../auth/logout.php">Logout</a></li>
-                        </ul>
-                    </li>
-                </ul>
-            </div>
+<body class="bg-light">
+
+<div class="d-flex flex-column flex-md-row">
+  
+  <nav class="sidebar p-3 shadow">
+    <a href="index.php" class="d-flex align-items-center mb-4 text-white text-decoration-none">
+      <span class="fs-4 fw-bold">EduSync</span>
+    </a>
+    <hr>
+    <ul class="nav nav-pills flex-column mb-auto">
+      <li class="nav-item">
+        <a href="index.php" class="nav-link active"><i class="bi bi-speedometer2 me-2"></i> Dashboard</a>
+      </li>
+      <li><a href="users.php" class="nav-link"><i class="bi bi-people me-2"></i> Users</a></li>
+      <li><a href="roles.php" class="nav-link"><i class="bi bi-shield-lock me-2"></i> Roles</a></li>
+      <li><a href="students.php" class="nav-link"><i class="bi bi-person-video3 me-2"></i> Students</a></li>
+      <li><a href="classes.php" class="nav-link"><i class="bi bi-building me-2"></i> Classes</a></li>
+      <li><a href="courses.php" class="nav-link"><i class="bi bi-journal-bookmark me-2"></i> Courses</a></li>
+      <li><a href="enrollments.php" class="nav-link"><i class="bi bi-journal-check me-2"></i> Enrollments</a></li>
+    </ul>
+    <hr>
+    <a href="../auth/logout.php" class="nav-link text-danger"><i class="bi bi-box-arrow-right me-2"></i> Logout</a>
+  </nav>
+
+  <main class="main-content container-fluid py-4">
+    
+    <div class="mb-4">
+      <h2 class="fw-bold">Dashboard Overview</h2>
+      <p class="text-muted">Welcome back, manage your school system efficiently.</p>
+    </div>
+
+    <div class="row g-3 mb-4">
+      <div class="col-md-3">
+        <div class="card border-0 shadow-sm p-3">
+          <div class="d-flex justify-content-between align-items-center">
+            <div><h6 class="text-muted">Students</h6><h3 class="fw-bold"><?= $stats->total_students ?></h3></div>
+            <i class="bi bi-people fs-1 text-primary"></i>
+          </div>
         </div>
-    </nav>
-
-    <main class="container-fluid py-4">
-        <div class="row mb-4">
-            <div class="col-12">
-                <h1 class="h3 fw-bold text-dark">Admin Dashboard</h1>
-                <p class="text-muted">System overview and management center</p>
-            </div>
+      </div>
+      <div class="col-md-3">
+        <div class="card border-0 shadow-sm p-3">
+          <div class="d-flex justify-content-between align-items-center">
+            <div><h6 class="text-muted">Teachers</h6><h3 class="fw-bold"><?= $stats->total_teachers ?></h3></div>
+            <i class="bi bi-person-badge fs-1 text-success"></i>
+          </div>
         </div>
-
-        <!-- Key Stats Row -->
-        <div class="row g-3 mb-4">
-            <div class="col-12 col-sm-6 col-lg-3">
-                <div class="card border-0 shadow-sm h-100">
-                    <div class="card-body">
-                        <div class="d-flex align-items-center">
-                            <div class="flex-grow-1">
-                                <p class="card-text text-muted small mb-1">Total Users</p>
-                                <h4 class="card-title fw-bold mb-0"><?= $totalUsers ?></h4>
-                            </div>
-                            <div class="bg-primary bg-opacity-10 p-3 rounded">
-                                <i class="bi bi-people text-primary"></i>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-            </div>
-
-            <div class="col-12 col-sm-6 col-lg-3">
-                <div class="card border-0 shadow-sm h-100">
-                    <div class="card-body">
-                        <div class="d-flex align-items-center">
-                            <div class="flex-grow-1">
-                                <p class="card-text text-muted small mb-1">Students</p>
-                                <h4 class="card-title fw-bold mb-0"><?= $totalStudents ?></h4>
-                            </div>
-                            <div class="bg-success bg-opacity-10 p-3 rounded">
-                                <i class="bi bi-person-check text-success"></i>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-            </div>
-
-            <div class="col-12 col-sm-6 col-lg-3">
-                <div class="card border-0 shadow-sm h-100">
-                    <div class="card-body">
-                        <div class="d-flex align-items-center">
-                            <div class="flex-grow-1">
-                                <p class="card-text text-muted small mb-1">Teachers</p>
-                                <h4 class="card-title fw-bold mb-0"><?= $totalTeachers ?></h4>
-                            </div>
-                            <div class="bg-info bg-opacity-10 p-3 rounded">
-                                <i class="bi bi-person-badge text-info"></i>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-            </div>
-
-            <div class="col-12 col-sm-6 col-lg-3">
-                <div class="card border-0 shadow-sm h-100">
-                    <div class="card-body">
-                        <div class="d-flex align-items-center">
-                            <div class="flex-grow-1">
-                                <p class="card-text text-muted small mb-1">System Health</p>
-                                <h4 class="card-title fw-bold mb-0">99%</h4>
-                            </div>
-                            <div class="bg-warning bg-opacity-10 p-3 rounded">
-                                <i class="bi bi-heart-pulse text-warning"></i>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-            </div>
+      </div>
+      <div class="col-md-3">
+        <div class="card border-0 shadow-sm p-3">
+          <div class="d-flex justify-content-between align-items-center">
+            <div><h6 class="text-muted">Courses</h6><h3 class="fw-bold"><?= $stats->total_courses ?></h3></div>
+            <i class="bi bi-journal-bookmark fs-1 text-info"></i>
+          </div>
         </div>
-
-        <!-- Main Management Row -->
-        <div class="row g-3">
-            <!-- Recent Users -->
-            <div class="col-12 col-lg-8">
-                <div class="card border-0 shadow-sm">
-                    <div class="card-header bg-white border-bottom">
-                        <h5 class="card-title mb-0 fw-bold">Recent Users</h5>
-                    </div>
-                    <div class="card-body">
-                        <div class="table-responsive">
-                            <table class="table table-hover mb-0">
-                                <thead class="table-light">
-                                    <tr>
-                                        <th>Name</th>
-                                        <th>Email</th>
-                                        <th>Role</th>
-                                        <th>Status</th>
-                                        <th>Action</th>
-                                    </tr>
-                                </thead>
-                                <tbody>
-                                    <tr>
-                                        <td><strong>John Smith</strong></td>
-                                        <td>john.smith@example.com</td>
-                                        <td><span class="badge bg-primary">Student</span></td>
-                                        <td><span class="badge bg-success">Active</span></td>
-                                        <td>
-                                            <button class="btn btn-sm btn-outline-secondary" title="Edit">
-                                                <i class="bi bi-pencil"></i>
-                                            </button>
-                                        </td>
-                                    </tr>
-                                    <tr>
-                                        <td><strong>Dr. Jane Doe</strong></td>
-                                        <td>jane.doe@example.com</td>
-                                        <td><span class="badge bg-info">Teacher</span></td>
-                                        <td><span class="badge bg-success">Active</span></td>
-                                        <td>
-                                            <button class="btn btn-sm btn-outline-secondary" title="Edit">
-                                                <i class="bi bi-pencil"></i>
-                                            </button>
-                                        </td>
-                                    </tr>
-                                    <tr>
-                                        <td><strong>Sarah Johnson</strong></td>
-                                        <td>sarah.johnson@example.com</td>
-                                        <td><span class="badge bg-primary">Student</span></td>
-                                        <td><span class="badge bg-warning text-dark">Pending</span></td>
-                                        <td>
-                                            <button class="btn btn-sm btn-outline-secondary" title="Edit">
-                                                <i class="bi bi-pencil"></i>
-                                            </button>
-                                        </td>
-                                    </tr>
-                                    <tr>
-                                        <td><strong>Prof. Michael Brown</strong></td>
-                                        <td>michael.brown@example.com</td>
-                                        <td><span class="badge bg-info">Teacher</span></td>
-                                        <td><span class="badge bg-success">Active</span></td>
-                                        <td>
-                                            <button class="btn btn-sm btn-outline-secondary" title="Edit">
-                                                <i class="bi bi-pencil"></i>
-                                            </button>
-                                        </td>
-                                    </tr>
-                                </tbody>
-                            </table>
-                        </div>
-                    </div>
-                    <div class="card-footer bg-white border-top">
-                        <a href="#users" class="btn btn-sm btn-danger">Manage All Users</a>
-                    </div>
-                </div>
-            </div>
-
-            <!-- System Alerts & Notifications -->
-            <div class="col-12 col-lg-4">
-                <div class="card border-0 shadow-sm h-100">
-                    <div class="card-header bg-white border-bottom">
-                        <h5 class="card-title mb-0 fw-bold">System Alerts</h5>
-                    </div>
-                    <div class="card-body">
-                        <div class="mb-3">
-                            <div class="alert alert-info mb-3" role="alert">
-                                <i class="bi bi-info-circle"></i>
-                                <strong class="ms-2">System Update</strong>
-                                <p class="small mt-2">New security patches available</p>
-                            </div>
-
-                            <div class="alert alert-warning mb-3" role="alert">
-                                <i class="bi bi-exclamation-triangle"></i>
-                                <strong class="ms-2">Maintenance Scheduled</strong>
-                                <p class="small mt-2">Database backup on April 25</p>
-                            </div>
-
-                            <div class="alert alert-success mb-3" role="alert">
-                                <i class="bi bi-check-circle"></i>
-                                <strong class="ms-2">All Systems Operational</strong>
-                                <p class="small mt-2">99% uptime this month</p>
-                            </div>
-
-                            <div class="alert alert-info mb-0" role="alert">
-                                <i class="bi bi-clock"></i>
-                                <strong class="ms-2">Daily Backup Complete</strong>
-                                <p class="small mt-2">Last backup: Today at 2:30 AM</p>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-            </div>
+      </div>
+      <div class="col-md-3">
+        <div class="card border-0 shadow-sm p-3">
+          <div class="d-flex justify-content-between align-items-center">
+            <div><h6 class="text-muted">Classes</h6><h3 class="fw-bold"><?= $stats->total_classes ?></h3></div>
+            <i class="bi bi-building fs-1 text-warning"></i>
+          </div>
         </div>
+      </div>
+    </div>
 
-        <!-- Admin Actions -->
-        <div class="row g-3 mt-2">
-            <div class="col-12">
-                <div class="card border-0 shadow-sm">
-                    <div class="card-header bg-white border-bottom">
-                        <h5 class="card-title mb-0 fw-bold">Management Actions</h5>
-                    </div>
-                    <div class="card-body">
-                        <div class="d-flex flex-wrap gap-2">
-                            <a href="#" class="btn btn-danger">
-                                <i class="bi bi-person-plus"></i> Add New User
-                            </a>
-                            <a href="#" class="btn btn-outline-danger">
-                                <i class="bi bi-file-earmark-pdf"></i> Generate Reports
-                            </a>
-                            <a href="#" class="btn btn-outline-danger">
-                                <i class="bi bi-shield-check"></i> View Audit Logs
-                            </a>
-                            <a href="#" class="btn btn-outline-danger">
-                                <i class="bi bi-gear"></i> System Settings
-                            </a>
-                            <a href="#" class="btn btn-outline-danger">
-                                <i class="bi bi-download"></i> Backup Database
-                            </a>
-                            <a href="#" class="btn btn-outline-danger">
-                                <i class="bi bi-exclamation-octagon"></i> View Logs
-                            </a>
-                        </div>
-                    </div>
-                </div>
-            </div>
+    <div class="row g-3">
+      <div class="col-md-6">
+        <div class="card border-0 shadow-sm">
+          <div class="card-header bg-white border-0 d-flex justify-content-between align-items-center py-3">
+            <h5 class="mb-0">Latest Students</h5>
+            <a href="students.php" class="btn btn-sm btn-outline-primary">View All</a>
+          </div>
+          <div class="card-body p-0">
+            <table class="table table-hover mb-0">
+              <thead class="table-light">
+                <tr><th>#</th><th>Name</th><th>Class</th></tr>
+              </thead>
+              <tbody>
+                <?php foreach ($students as $student): ?>
+                <tr>
+                  <td><?= $student->id ?></td>
+                  <td><?= $student->firstname . ' ' . $student->lastname ?></td>
+                  <td><span class="badge bg-secondary"><?= $student->class_name ?></span></td>
+                </tr>
+                <?php endforeach; ?>
+              </tbody>
+            </table>
+          </div>
         </div>
-    </main>
+      </div>
 
-    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+      <div class="col-md-6">
+        <div class="card border-0 shadow-sm">
+          <div class="card-header bg-white border-0 d-flex justify-content-between align-items-center py-3">
+            <h5 class="mb-0">Latest Courses</h5>
+            <a href="courses.php" class="btn btn-sm btn-outline-success">View All</a>
+          </div>
+          <div class="card-body p-0">
+            <table class="table table-hover mb-0">
+              <thead class="table-light">
+                <tr><th>#</th><th>Title</th><th>Hours</th></tr>
+              </thead>
+              <tbody>
+                <?php foreach ($courses as $course): ?>
+                <tr>
+                  <td><?= $course->id ?></td>
+                  <td><?= $course->title ?></td>
+                  <td><span class="badge bg-info"><?= $course->total_hours ?>h</span></td>
+                </tr>
+                <?php endforeach; ?>
+              </tbody>
+            </table>
+          </div>
+        </div>
+      </div>
+    </div>
+
+  </main>
+</div>
+
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
 </body>
-
 </html>
