@@ -43,10 +43,13 @@ if (isset($_POST['register'])) {
         exit;
     }
 
-   
-    
-}
+    $sqlS = $pdo->prepare("INSERT INTO users (firstname, lastname, email, password,role_id) VALUES (?, ?, ?, ?, ?)");
+    $sqlS->execute([$firstname, $lastname, $email, password_hash($password, PASSWORD_DEFAULT), 3]);
+    $_SESSION['messageSuccess'] = "registration successful";
+    header('location: register.php');
+    exit;
 
+}
 
 
 ?>
