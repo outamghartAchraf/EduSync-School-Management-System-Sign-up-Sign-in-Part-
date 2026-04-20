@@ -40,7 +40,12 @@ if (isset($_POST['login'])) {
             exit;
         }
 
-    }  
+    } else {
+        
+        $_SESSION['messageError'] = "Email ou mot de passe incorrect";
+        header("location: login.php");
+        exit;
+    }
 }
 ?>
 
