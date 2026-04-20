@@ -11,9 +11,13 @@ if (isset($_POST['register'])) {
     $password  = $_POST['password'];
     $confirm   = $_POST['confirm_password'];
 
-    if(empty($firstname) || empty($lastname)){
-        $messageError = "first name and last name required";
+    if(empty($firstname) || empty($lastname) || empty($email) ){
+        $messageError = "first name and last name and email required";
     }
+
+    if($password !== $confirm) {
+     }
+   
     
 }
 
