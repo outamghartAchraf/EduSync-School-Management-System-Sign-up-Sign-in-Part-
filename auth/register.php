@@ -5,12 +5,12 @@ include '../config/db.php';
 $messageError = '';
 $messageSuccess = '';
 
-if(isset($_SESSION['messageError'])){
-  $messageError = $_SESSION['messageError'];
-  unset($_SESSION['messageError']);
+if (isset($_SESSION['messageError'])) {
+    $messageError = $_SESSION['messageError'];
+    unset($_SESSION['messageError']);
 }
 
-if(isset($_SESSION['messageSuccess'])){
+if (isset($_SESSION['messageSuccess'])) {
     $messageSuccess = $_SESSION['messageSuccess'];
     unset($_SESSION['messageSuccess']);
 }
@@ -22,13 +22,13 @@ if (isset($_POST['register'])) {
     $password  = $_POST['password'];
     $confirm   = $_POST['confirm_password'];
 
-    if(empty($firstname) || empty($lastname) || empty($email) ){
+    if (empty($firstname) || empty($lastname) || empty($email)) {
         $_SESSION['messageError'] = "first name and last name and email required";
         header("location: register.php");
         exit;
     }
 
-    if($password !== $confirm) {
+    if ($password !== $confirm) {
         $_SESSION['messageError'] = "password and confirm password not match";
         header("location: register.php");
         exit;
@@ -37,7 +37,7 @@ if (isset($_POST['register'])) {
     $sqlState = $pdo->prepare("SELECT * FROM users WHERE email = ?");
     $sqlState->execute([$email]);
     $user = $sqlState->fetch(PDO::FETCH_OBJ);
-    if($user) {
+    if ($user) {
         $_SESSION['messageError'] = "email already exists";
         header('location: register.php');
         exit;
@@ -48,7 +48,6 @@ if (isset($_POST['register'])) {
     $_SESSION['messageSuccess'] = "registration successful";
     header('location: register.php');
     exit;
-
 }
 
 
@@ -84,6 +83,14 @@ if (isset($_POST['register'])) {
                         <div class="col-md-7 bg-white p-4 p-lg-5">
                             <h2 class="h4 fw-bold mb-1">Register</h2>
                             <p class="text-muted mb-4">Fill your details to continue.</p>
+
+                            <?php if ($messageError): ?>
+                                <div class="alert alert-danger"><?= htmlspecialchars($messageError) ?></div>
+                            <?php endif; ?>
+
+                            <?php if ($messageSuccess): ?>
+                                <div class="alert alert-success"><?= htmlspecialchars($messageSuccess) ?></div>
+                            <?php endif; ?>
 
 
 
