@@ -10,6 +10,10 @@ if(isset($_SESSION['messageError'])){
   unset($_SESSION['messageError']);
 }
 
+if(isset($_SESSION['messageSuccess'])){
+    $messageSuccess = $_SESSION['messageSuccess'];
+    unset($_SESSION['messageSuccess']);
+}
 
 if (isset($_POST['register'])) {
     $firstname = htmlspecialchars($_POST['firstname']);
@@ -19,11 +23,15 @@ if (isset($_POST['register'])) {
     $confirm   = $_POST['confirm_password'];
 
     if(empty($firstname) || empty($lastname) || empty($email) ){
-        $messageError = "first name and last name and email required";
+        $_SESSION['messageError'] = "first name and last name and email required";
+        header("location: register.php");
+        exit;
     }
 
     if($password !== $confirm) {
-        $messageError = "password and confirm password not match";
+        $_SESSION['messageError'] = "password and confirm password not match";
+        header("location: register.php");
+        exit;
     }
 
    
