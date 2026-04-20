@@ -1,4 +1,20 @@
+<?php 
+session_start();
+include '../config/db.php';
 
+$messageError = '';
+if(isset($_SESSION['messageError'])) {
+    $messageError = $_SESSION['messageError'];
+    unset($_SESSION['messageError']);
+}
+
+if (isset($_POST['login'])) {
+    $email = htmlspecialchars($_POST['email']);
+    $password = $_POST['password'];
+}
+
+
+?>
 
 
 <!DOCTYPE html>
