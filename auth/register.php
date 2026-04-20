@@ -10,6 +10,10 @@ if (isset($_POST['register'])) {
     $email     = htmlspecialchars($_POST['email']);
     $password  = $_POST['password'];
     $confirm   = $_POST['confirm_password'];
+
+    if(empty($firstname) || empty($lastname)){
+        $messageError = "first name and last name required";
+    }
     
 }
 
