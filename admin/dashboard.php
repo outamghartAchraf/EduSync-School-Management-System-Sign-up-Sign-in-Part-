@@ -7,6 +7,12 @@ if (!isset($_SESSION['user']['id'])) {
     exit;
 }
 
+// check role
+if ($_SESSION['user']['role_id'] != 1) {
+    header("Location: ../auth/login.php");
+    exit;
+}
+
 $sqlState = $pdo->query("SELECT 
 (SELECT COUNT(*) FROM students) AS total_students,
 (SELECT COUNT(*) FROM users JOIN roles ON users.role_id = roles.id WHERE roles.role_name = 'Professor') AS total_teachers,
