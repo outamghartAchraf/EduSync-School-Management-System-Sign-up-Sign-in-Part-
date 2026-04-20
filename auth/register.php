@@ -34,6 +34,15 @@ if (isset($_POST['register'])) {
         exit;
     }
 
+    $sqlState = $pdo->prepare("SELECT * FROM users WHERE email = ?");
+    $sqlState->execute([$email]);
+    $user = $sqlState->fetch(PDO::FETCH_OBJ);
+    if($user) {
+        $_SESSION['messageError'] = "email already exists";
+        header('location: register.php');
+        exit;
+    }
+
    
     
 }
