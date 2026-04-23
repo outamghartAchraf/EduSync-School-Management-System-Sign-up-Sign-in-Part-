@@ -2,6 +2,17 @@
 session_start();
 include '../config/db.php';
 
+if (isset($_SESSION['user']['id'])) {
+
+    if ($_SESSION['user']['role_id'] == 1) {
+        header("Location: ../admin/dashboard.php");
+    } else if ($_SESSION['user']['role_id'] == 3) {
+        header("Location: ../student/dashboard.php");
+    }
+
+    exit;
+}
+
 $messageError = '';
 if (isset($_SESSION['messageError'])) {
     $messageError = $_SESSION['messageError'];

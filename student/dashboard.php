@@ -9,6 +9,7 @@ if (!isset($_SESSION['user']['id'])) {
 
 $userId = $_SESSION['user']['id'];
 
+
 $stmt = $pdo->prepare("SELECT * FROM users WHERE id = ?");
 $stmt->execute([$userId]);
 $user = $stmt->fetch(PDO::FETCH_OBJ);
@@ -117,7 +118,7 @@ $user = $stmt->fetch(PDO::FETCH_OBJ);
     <main class="main-content">
         <div class="d-flex justify-content-between align-items-center mb-4 pb-3 border-bottom">
             <div>
-                <h1 class="h3 fw-bold mb-0">Welcome, <?= htmlspecialchars($user->firstname ?? 'Student') ?>! 👋</h1>
+                <h1 class="h3 fw-bold mb-0">Welcome, <?= htmlspecialchars($user->firstname ?? 'Student') ?>! </h1>
                 <p class="text-muted mb-0">Here's your academic overview.</p>
             </div>
             <div class="d-flex align-items-center bg-white p-2 rounded shadow-sm">
