@@ -23,9 +23,8 @@ $users = $sqlState->fetchAll(PDO::FETCH_OBJ);
 
 
 
+
 ?>
-
-
 
 
 <!DOCTYPE html>
@@ -124,7 +123,7 @@ $users = $sqlState->fetchAll(PDO::FETCH_OBJ);
 
                             <div>
                                 <h6 class="text-muted mb-2">Total Users</h6>
-                                <h3 class="fw-bold mb-0"></h3>
+                                <h3 class="fw-bold mb-0"><?php echo count($users); ?></h3>
                             </div>
 
                             <i class="bi bi-people text-primary stat-icon"></i>
@@ -164,7 +163,47 @@ $users = $sqlState->fetchAll(PDO::FETCH_OBJ);
                             </thead>
 
                             <tbody>
+                                <?php foreach ($users as $user): ?>
+                                    <tr>
 
+                                        <td><?= $user->id; ?></td>
+
+                                        <td>
+                                            <div class="d-flex align-items-center">
+
+                                                <div class="bg-primary text-white rounded-circle d-flex justify-content-center align-items-center me-2"
+                                                    style="width:35px; height:35px;">
+                                                    <?= strtoupper(substr($user->firstname, 0, 1)); ?>
+                                                </div>
+
+                                                <span>
+                                                    <?= $user->firstname . ' ' . $user->lastname; ?>
+                                                </span>
+
+                                            </div>
+                                        </td>
+
+                                        <td><?= $user->email; ?></td>
+
+                                        <td>
+                                            <span class="badge bg-secondary">
+                                                <?= $user->role_name; ?>
+                                            </span>
+                                        </td>
+                                        <td>
+
+                                            <button type="submit" name="edit_user" class="btn btn-sm btn-warning me-1">
+                                                <i class="bi bi-pencil"></i>
+                                            </button>
+
+                                            <button type="submit" name="delete_user" class="btn btn-sm btn-danger">
+                                                <i class="bi bi-trash"></i>
+                                            </button>
+
+                                        </td>
+
+                                    </tr>
+                                <?php endforeach; ?>
                             </tbody>
 
                         </table>
