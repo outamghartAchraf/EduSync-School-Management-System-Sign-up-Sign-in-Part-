@@ -21,7 +21,11 @@ LEFT JOIN roles ON users.role_id = roles.id");
 
 $users = $sqlState->fetchAll(PDO::FETCH_OBJ);
 
+// get roles for the select option in model 
+$rolesState = $pdo->query("SELECT * FROM roles");
+$roles = $rolesState->fetchAll(PDO::FETCH_OBJ);
 
+// code for adding new user 
 
 
 ?>
