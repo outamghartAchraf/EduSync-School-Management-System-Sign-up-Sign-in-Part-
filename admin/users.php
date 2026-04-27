@@ -160,7 +160,64 @@ if (isset($_POST['edit_user'])) {
             </div>
 
          
+   <?php if ($editUser): ?>
+                <div class="modal fade show d-block" tabindex="-1" style="background:rgba(0,0,0,0.5)">
 
+                    <div class="modal-dialog modal-lg modal-dialog-centered">
+                        <div class="modal-content">
+
+                            <div class="modal-header">
+                                <h5>Edit User</h5>
+                                <a href="<?= $_SERVER['PHP_SELF'] ?>" class="btn-close"></a>
+                            </div>
+
+                            <div class="modal-body">
+
+                                <form method="POST">
+                                    <input type="hidden" name="user_id" value="<?= $editUser->id ?>">
+
+                                    <div class="row g-2">
+
+                                        <div class="col-md-6">
+                                            <input name="firstname" class="form-control" value="<?= $editUser->firstname ?>">
+                                        </div>
+
+                                        <div class="col-md-6">
+                                            <input name="lastname" class="form-control" value="<?= $editUser->lastname ?>">
+                                        </div>
+
+                                        <div class="col-md-6 mt-2">
+                                            <input name="email" class="form-control" value="<?= $editUser->email ?>">
+                                        </div>
+
+                                        <div class="col-md-6 mt-2">
+                                            <select name="role_id" class="form-control">
+                                                <?php foreach ($roles as $role): ?>
+                                                    <option value="<?= $role->id ?>"
+                                                        <?= $role->id == $editUser->role_id ? 'selected' : '' ?>>
+                                                        <?= $role->role_name ?>
+                                                    </option>
+                                                <?php endforeach; ?>
+                                            </select>
+                                        </div>
+
+                                    </div>
+
+                                    <div class="mt-3">
+                                        <button name="update_user" class="btn btn-success w-100">
+                                            Update User
+                                        </button>
+                                    </div>
+
+                                </form>
+
+                            </div>
+
+                        </div>
+                    </div>
+
+                </div>
+            <?php endif; ?>
 
             <!-- STATS -->
             <div class="row g-3 mb-4">
