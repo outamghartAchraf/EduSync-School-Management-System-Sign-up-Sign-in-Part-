@@ -62,6 +62,22 @@ if (isset($_POST['edit_user'])) {
     $editUser = $sqlState->fetch(PDO::FETCH_OBJ);
 }
 
+// update user
+
+if(isset($_POST['update_user'])){
+  $user_id = $_POST['user_id'];
+  $firstname = $_POST['firstname'];
+  $lastname = $_POST['lastname'];
+  $email = $_POST['email'];
+  $role_id = $_POST['role_id'];
+
+  $sql = $pdo->prepare("UPDATE users SET firstname = ?, lastname = ?, email = ?, role_id = ? WHERE id = ?");
+  $sql->execute([$firstname, $lastname, $email, $role_id, $user_id]);
+
+  header("location: ".$_SERVER['PHP_SELF']);
+  exit;
+
+}
 
 
 
@@ -159,8 +175,8 @@ if (isset($_POST['edit_user'])) {
                 </div>
             </div>
 
-         
-   <?php if ($editUser): ?>
+
+            <?php if ($editUser): ?>
                 <div class="modal fade show d-block" tabindex="-1" style="background:rgba(0,0,0,0.5)">
 
                     <div class="modal-dialog modal-lg modal-dialog-centered">
