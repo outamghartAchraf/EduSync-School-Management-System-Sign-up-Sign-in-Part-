@@ -100,6 +100,9 @@ $roles = $rolesState->fetchAll(PDO::FETCH_OBJ);
                                     <div class="col-md-6">
                                         <select name="role_id" class="form-select" required>
                                             <option value="">Select Role</option>
+                                            <?php foreach ($roles as $role): ?>
+                                                <option value="<?= $role->id ?>"><?= $role->role_name ?></option>
+                                            <?php endforeach; ?>
                                         </select>
                                     </div>
 
