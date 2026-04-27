@@ -13,7 +13,7 @@ include '../config/db.php';
   <meta charset="UTF-8">
   <title>Profil Étudiant</title>
 
-  <!-- Tailwind CSS -->
+ 
   <script src="https://cdn.tailwindcss.com"></script>
 </head>
 
@@ -21,10 +21,10 @@ include '../config/db.php';
 
   <div class="bg-white shadow-xl rounded-2xl w-96 overflow-hidden">
 
-    <!-- Header -->
+   
     <div class="bg-indigo-500 h-28"></div>
 
-    <!-- Photo -->
+   
     <div class="flex justify-center">
       <img src="https://share.google/p3PokoO3N4ingeRSd"
            class="w-28 h-28 rounded-full border-4 border-white -mt-14"
