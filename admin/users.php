@@ -27,6 +27,21 @@ $roles = $rolesState->fetchAll(PDO::FETCH_OBJ);
 
 // code for adding new user 
 
+if(isset($_POST['add_user'])){
+  $firstname = $_POST['firstname'];
+  $lastname = $_POST['lastname'];
+  $email = $_POST['email'];
+  $password = password_hash($_POST['password'], PASSWORD_DEFAULT);
+  $role_id = $_POST['role_id'];
+   
+  $sql = $pdo->prepare("INSERT INTO users (firstname, lastname, email, password, role_id) VALUES (?, ?, ?, ?, ?)");
+  $sql->execute([$firstname, $lastname, $email, $password, $role_id]);
+
+  header("location: ".$_SERVER['PHP_SELF']);
+  exit;
+ 
+}
+
 
 ?>
 
