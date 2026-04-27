@@ -51,6 +51,10 @@ if (isset($_POST['login'])) {
             header("location: ../student/dashboard.php");
             exit;
         }
+        else if ($user->role_id == 2) {
+            header("location: ../teacher/dashboard.php");
+            exit;
+            }
     } else {
 
         $_SESSION['messageError'] = "Email ou mot de passe incorrect";
