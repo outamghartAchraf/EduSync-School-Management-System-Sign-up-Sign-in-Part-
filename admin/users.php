@@ -27,20 +27,30 @@ $roles = $rolesState->fetchAll(PDO::FETCH_OBJ);
 
 // code for adding new user 
 
-if(isset($_POST['add_user'])){
-  $firstname = $_POST['firstname'];
-  $lastname = $_POST['lastname'];
-  $email = $_POST['email'];
-  $password = password_hash($_POST['password'], PASSWORD_DEFAULT);
-  $role_id = $_POST['role_id'];
-   
-  $sql = $pdo->prepare("INSERT INTO users (firstname, lastname, email, password, role_id) VALUES (?, ?, ?, ?, ?)");
-  $sql->execute([$firstname, $lastname, $email, $password, $role_id]);
+if (isset($_POST['add_user'])) {
+    $firstname = $_POST['firstname'];
+    $lastname = $_POST['lastname'];
+    $email = $_POST['email'];
+    $password = password_hash($_POST['password'], PASSWORD_DEFAULT);
+    $role_id = $_POST['role_id'];
 
-  header("location: ".$_SERVER['PHP_SELF']);
-  exit;
- 
+    $sql = $pdo->prepare("INSERT INTO users (firstname, lastname, email, password, role_id) VALUES (?, ?, ?, ?, ?)");
+    $sql->execute([$firstname, $lastname, $email, $password, $role_id]);
+
+    header("location: " . $_SERVER['PHP_SELF']);
+    exit;
 }
+
+// delete user 
+
+if(isset($_POST['delete_user'])) {
+    $user_id = $_POST['user_id'];
+    $sql = $pdo->prepare("DELETE FROM users WHERE id = ?");
+    $sql->execute([$user_id]);
+    header("location: " . $_SERVER['PHP_SELF']);
+    exit;
+}
+
 
 
 ?>
@@ -218,9 +228,13 @@ if(isset($_POST['add_user'])){
                                                 <i class="bi bi-pencil"></i>
                                             </button>
 
-                                            <button type="submit" name="delete_user" class="btn btn-sm btn-danger">
-                                                <i class="bi bi-trash"></i>
-                                            </button>
+                                            <form method="post" class="d-inline">
+                                                <input type="hidden" name="user_id" value="<?= $user->id ?>">
+                                                <button type="submit" name="delete_user" class="btn btn-sm btn-danger">
+                                                    <i class="bi bi-trash"></i>
+                                                </button>
+
+                                            </form>
 
                                         </td>
 
