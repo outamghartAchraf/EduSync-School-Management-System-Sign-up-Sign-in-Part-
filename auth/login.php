@@ -33,7 +33,6 @@ if (isset($_POST['login'])) {
     $sqlState->execute([$email]);
     $user = $sqlState->fetch(PDO::FETCH_OBJ);
 
-
     if ($user && password_verify($password, $user->password)) {
 
         $_SESSION['user'] = [
