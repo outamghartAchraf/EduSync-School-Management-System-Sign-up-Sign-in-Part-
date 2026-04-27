@@ -1,0 +1,135 @@
+<?php
+session_start();
+include '../config/db.php';
+
+$messageError = '';
+$messageSuccess = '';
+
+if (isset($_SESSION['messageError'])) {
+    $messageError = $_SESSION['messageError'];
+    unset($_SESSION['messageError']);
+}
+
+if (isset($_SESSION['messageSuccess'])) {
+    $messageSuccess = $_SESSION['messageSuccess'];
+    unset($_SESSION['messageSuccess']);
+}
+
+if (isset($_POST['register'])) {
+    $firstname = htmlspecialchars($_POST['firstname']);
+    $lastname  = htmlspecialchars($_POST['lastname']);
+    $email     = htmlspecialchars($_POST['email']);
+    $password  = $_POST['password'];
+    $confirm   = $_POST['confirm_password'];
+
+    if (empty($firstname) || empty($lastname) || empty($email)) {
+        $_SESSION['messageError'] = "first name and last name and email required";
+        header("location: register.php");
+        exit;
+    }
+
+    if ($password !== $confirm) {
+        $_SESSION['messageError'] = "password and confirm password not match";
+        header("location: register.php");
+        exit;
+    }
+
+    $sqlState = $pdo->prepare("SELECT * FROM users WHERE email = ?");
+    $sqlState->execute([$email]);
+    $user = $sqlState->fetch(PDO::FETCH_OBJ);
+    if ($user) {
+        $_SESSION['messageError'] = "email already exists";
+        header('location: register.php');
+        exit;
+    }
+
+    $sqlS = $pdo->prepare("INSERT INTO users (firstname, lastname, email, password,role_id) VALUES (?, ?, ?, ?, ?)");
+    $sqlS->execute([$firstname, $lastname, $email, password_hash($password, PASSWORD_DEFAULT), 3]);
+    $_SESSION['messageSuccess'] = "registration successful";
+    header('location: register.php');
+    exit;
+}
+
+
+?>
+
+<!DOCTYPE html>
+<html lang="en" class="h-100">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Register - EduSync</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+</head>
+
+<body class="bg-body-secondary vh-100 h-100 m-0 d-flex align-items-center">
+    <div class="container h-100">
+        <div class="row justify-content-center align-items-center w-100 h-100">
+            <div class="col-12 col-lg-10 col-xl-9">
+                <div class="card border-0 shadow-lg overflow-hidden">
+                    <div class="row g-0">
+                        <div class="col-md-5 bg-success text-white p-4 p-lg-5 d-flex flex-column justify-content-center">
+                            <span class="badge rounded-pill text-bg-light text-success mb-3 w-auto">EduSync Portal</span>
+                            <h1 class="h3 fw-bold mb-3">Create Your Account</h1>
+                            <p class="mb-4">Join EduSync to manage school activities with a simple and secure experience.</p>
+                            <ul class="list-unstyled small mb-0">
+                                <li class="mb-2">- Fast registration</li>
+                                <li class="mb-2">- Mobile friendly access</li>
+                                <li>- Student and teacher ready</li>
+                            </ul>
+                        </div>
+
+                        <div class="col-md-7 bg-white p-4 p-lg-5">
+                            <h2 class="h4 fw-bold mb-1">Register</h2>
+                            <p class="text-muted mb-4">Fill your details to continue.</p>
+
+                            <?php if ($messageError): ?>
+                                <div class="alert alert-danger"><?= htmlspecialchars($messageError) ?></div>
+                            <?php endif; ?>
+
+                            <?php if ($messageSuccess): ?>
+                                <div class="alert alert-success"><?= htmlspecialchars($messageSuccess) ?></div>
+                            <?php endif; ?>
+
+
+
+                            <form method="POST">
+                                <div class="row g-3 mb-3">
+                                    <div class="col-12 col-sm-6">
+                                        <input type="text" name="firstname" class="form-control form-control-lg" placeholder="First Name">
+                                    </div>
+                                    <div class="col-12 col-sm-6">
+                                        <input type="text" name="lastname" class="form-control form-control-lg" placeholder="Last Name">
+                                    </div>
+                                </div>
+
+                                <div class="mb-3">
+                                    <input type="email" name="email" class="form-control form-control-lg" placeholder="Email Address">
+                                </div>
+
+                                <div class="mb-3">
+                                    <input type="password" name="password" class="form-control form-control-lg" placeholder="Password">
+                                </div>
+
+                                <div class="mb-4">
+                                    <input type="password" name="confirm_password" class="form-control form-control-lg" placeholder="Confirm Password">
+                                </div>
+
+                                <button type="submit" name="register" class="btn btn-success btn-lg w-100">Create Account</button>
+                            </form>
+
+                            <p class="text-center text-muted mt-4 mb-0">
+                                Already have an account?
+                                <a href="login.php" class="link-success fw-semibold text-decoration-none">Login</a>
+                            </p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+</body>
+
+</html>
