@@ -1,4 +1,24 @@
-<?php include '../config/db.php'; ?>
+<?php
+session_start();
+include '../config/db.php';
+
+if (!isset($_SESSION['user']['id'])) {
+    header("location: ../auth/login.php");
+    exit;
+}
+
+// check role
+if ($_SESSION['user']['role_id'] != 1) {
+    header("Location: ../auth/login.php");
+    exit;
+}
+
+
+?>
+
+
+
+
 <!DOCTYPE html>
 <html lang="en">
 
