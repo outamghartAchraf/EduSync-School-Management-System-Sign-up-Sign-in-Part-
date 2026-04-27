@@ -13,6 +13,10 @@ if ($_SESSION['user']['role_id'] != 1) {
     exit;
 }
 
+// get classes from database
+$sqlState = $pdo->query("SELECT * FROM classes");
+$classes = $sqlState->fetchAll(PDO::FETCH_OBJ);
+
 
 
 ?>
@@ -126,7 +130,7 @@ if ($_SESSION['user']['role_id'] != 1) {
 
                         <div>
                             <h6 class="text-muted mb-1">Total Classes</h6>
-                            <h3 class="fw-bold mb-0"></h3>
+                            <h3 class="fw-bold mb-0"><?php echo count($classes); ?></h3>
                         </div>
 
                         <i class="bi bi-building fs-1 text-warning"></i>
@@ -172,7 +176,21 @@ if ($_SESSION['user']['role_id'] != 1) {
 
                         <tbody>
 
-                            <!-- DATA HERE -->
+                            <?php foreach ($classes as $class): ?>
+                                <tr>
+                                    <td><?=  $class->id; ?></td>
+                                    <td><?=  $class->name; ?></td>
+                                    <td><?=  $class->classroom_number; ?></td>
+                                    <td>
+                                        <button class="btn btn-sm btn-outline-primary">
+                                            <i class="bi bi-pencil"></i>  
+                                        </button>
+                                        <button class="btn btn-sm btn-outline-danger">
+                                            <i class="bi bi-trash"></i>  
+                                        </button>
+                                    </td>
+                                </tr>
+                            <?php endforeach; ?>
 
                         </tbody>
 
