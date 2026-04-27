@@ -42,14 +42,27 @@ if (isset($_POST['add_user'])) {
 }
 
 // delete user 
-
-if(isset($_POST['delete_user'])) {
+if (isset($_POST['delete_user'])) {
     $user_id = $_POST['user_id'];
     $sql = $pdo->prepare("DELETE FROM users WHERE id = ?");
     $sql->execute([$user_id]);
     header("location: " . $_SERVER['PHP_SELF']);
     exit;
 }
+
+// Edit user
+
+$editUser = null;
+
+if (isset($_POST['edit_user'])) {
+    $user_id = $_POST['user_id'];
+
+    $sqlState = $pdo->prepare("SELECT * FROM users WHERE id = ?");
+    $sqlState->execute([$user_id]);
+    $editUser = $sqlState->fetch(PDO::FETCH_OBJ);
+}
+
+
 
 
 
@@ -146,6 +159,9 @@ if(isset($_POST['delete_user'])) {
                 </div>
             </div>
 
+         
+
+
             <!-- STATS -->
             <div class="row g-3 mb-4">
 
@@ -223,11 +239,12 @@ if(isset($_POST['delete_user'])) {
                                             </span>
                                         </td>
                                         <td>
-
-                                            <button type="submit" name="edit_user" class="btn btn-sm btn-warning me-1">
-                                                <i class="bi bi-pencil"></i>
-                                            </button>
-
+                                            <form method="post" class="d-inline">
+                                                <input type="hidden" name="user_id" value="<?= $user->id ?>">
+                                                <button type="submit" name="edit_user" class="btn btn-sm btn-warning me-1">
+                                                    <i class="bi bi-pencil"></i>
+                                                </button>
+                                            </form>
                                             <form method="post" class="d-inline">
                                                 <input type="hidden" name="user_id" value="<?= $user->id ?>">
                                                 <button type="submit" name="delete_user" class="btn btn-sm btn-danger">
