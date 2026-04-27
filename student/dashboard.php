@@ -76,23 +76,23 @@ include '../config/db.php';
                 </a>
             </li>
             <li class="nav-item mb-2">
-                <a href="#courses" class="nav-link">
-                    <i class="bi bi-book"></i> My Courses
+                <a href="myprogramme.php" class="nav-link"><?php   header("myprogramme.php")  ?>
+                    <i class="bi bi-book"></i> Mon Programme
                 </a>
             </li>
             <li class="nav-item mb-2">
-                <a href="#grades" class="nav-link">
-                    <i class="bi bi-journal-check"></i> Grades
+                <a href="mapromotion.php" class="nav-link"><?php   header("mapromotion.php")  ?>
+                    <i class="bi bi-journal-check"></i> Mon promotion
                 </a>
             </li>
             <li class="nav-item mb-2">
-                <a href="#profile" class="nav-link">
+                <a href="profile.php" class="nav-link"><?php   header("profile.php")  ?>
                     <i class="bi bi-person-circle"></i> Profile
                 </a>
             </li>
             <li class="nav-item mb-2">
-                <a href="#settings" class="nav-link">
-                    <i class="bi bi-gear"></i> Settings
+                <a href="details.php" class="nav-link"><?php   header("details.php")  ?>
+                    <i class=""></i> Details
                 </a>
             </li>
         </ul>
@@ -112,106 +112,13 @@ include '../config/db.php';
                 <h1 class="h3 fw-bold mb-0">Welcome,   </h1>
                 <p class="text-muted mb-0">Here's your academic overview.</p>
             </div>
-            <div class="d-flex align-items-center bg-white p-2 rounded shadow-sm">
-                <i class="bi bi-person-circle fs-4 me-2 text-primary"></i>
-                <span class="fw-semibold"> </span>
-            </div>
+           
+
+        
+           
         </div>
 
-        <div class="row g-3 mb-4">
-            <div class="col-12 col-sm-6 col-lg-3">
-                <div class="card border-0 shadow-sm h-100 p-2">
-                    <div class="card-body d-flex align-items-center justify-content-between">
-                        <div>
-                            <p class="text-muted small mb-1">Active Courses</p>
-                            <h4 class="fw-bold mb-0">5</h4>
-                        </div>
-                        <div class="bg-primary bg-opacity-10 p-3 rounded"><i class="bi bi-book text-primary"></i></div>
-                    </div>
-                </div>
-            </div>
-
-            <div class="col-12 col-sm-6 col-lg-3">
-                <div class="card border-0 shadow-sm h-100 p-2">
-                    <div class="card-body d-flex align-items-center justify-content-between">
-                        <div>
-                            <p class="text-muted small mb-1">Current GPA</p>
-                            <h4 class="fw-bold mb-0">3.85</h4>
-                        </div>
-                        <div class="bg-success bg-opacity-10 p-3 rounded"><i class="bi bi-graph-up text-success"></i></div>
-                    </div>
-                </div>
-            </div>
-
-            <div class="col-12 col-sm-6 col-lg-3">
-                <div class="card border-0 shadow-sm h-100 p-2">
-                    <div class="card-body d-flex align-items-center justify-content-between">
-                        <div>
-                            <p class="text-muted small mb-1">Assignments</p>
-                            <h4 class="fw-bold mb-0">12</h4>
-                        </div>
-                        <div class="bg-warning bg-opacity-10 p-3 rounded"><i class="bi bi-clipboard-check text-warning"></i></div>
-                    </div>
-                </div>
-            </div>
-
-            <div class="col-12 col-sm-6 col-lg-3">
-                <div class="card border-0 shadow-sm h-100 p-2">
-                    <div class="card-body d-flex align-items-center justify-content-between">
-                        <div>
-                            <p class="text-muted small mb-1">Attendance</p>
-                            <h4 class="fw-bold mb-0">94%</h4>
-                        </div>
-                        <div class="bg-info bg-opacity-10 p-3 rounded"><i class="bi bi-calendar-check text-info"></i></div>
-                    </div>
-                </div>
-            </div>
-        </div>
-
-        <div class="row g-3">
-            <div class="col-12 col-lg-8">
-                <div class="card border-0 shadow-sm">
-                    <div class="card-header bg-white py-3 border-0">
-                        <h5 class="mb-0 fw-bold">Enrolled Courses</h5>
-                    </div>
-                    <div class="card-body p-0">
-                        <div class="table-responsive">
-                            <table class="table table-hover align-middle mb-0">
-                                <thead class="table-light">
-                                    <tr>
-                                        <th>Course Name</th>
-                                        <th>Instructor</th>
-                                        <th>Progress</th>
-                                        <th>Grade</th>
-                                    </tr>
-                                </thead>
-                                <tbody>
-                                    <tr>
-                                        <td><strong>Mathematics 101</strong></td>
-                                        <td>Dr. Smith</td>
-                                        <td style="width: 30%;">
-                                            <div class="progress" style="height: 8px;">
-                                                <div class="progress-bar bg-success" style="width: 85%;"></div>
-                                            </div>
-                                        </td>
-                                        <td><span class="badge bg-success-subtle text-success">A-</span></td>
-                                    </tr>
-                                    <tr>
-                                        <td><strong>Physics 201</strong></td>
-                                        <td>Prof. Johnson</td>
-                                        <td>
-                                            <div class="progress" style="height: 8px;">
-                                                <div class="progress-bar bg-info" style="width: 72%;"></div>
-                                            </div>
-                                        </td>
-                                        <td><span class="badge bg-info-subtle text-info">B+</span></td>
-                                    </tr>
-                                </tbody>
-                            </table>
-                        </div>
-                    </div>
-                </div>
-            </div>
+      
 
             <div class="col-12 col-lg-4">
                 <div class="card border-0 shadow-sm">
