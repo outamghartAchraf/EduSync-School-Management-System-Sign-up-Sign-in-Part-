@@ -39,19 +39,7 @@
                 </a>
             </li>
 
-            <li>
-                <a href="roles.php"
-                   class="nav-link <?= $currentPage == 'roles.php' ? 'bg-primary text-white' : 'text-white-50'; ?>">
-                    <i class="bi bi-shield-lock me-2"></i> Roles
-                </a>
-            </li>
-
-            <li>
-                <a href="students.php"
-                   class="nav-link <?= $currentPage == 'students.php' ? 'bg-primary text-white' : 'text-white-50'; ?>">
-                    <i class="bi bi-person-video3 me-2"></i> Students
-                </a>
-            </li>
+ 
 
             <li>
                 <a href="classes.php"
@@ -110,19 +98,7 @@
             </a>
         </li>
 
-        <li>
-            <a href="roles.php"
-               class="nav-link px-3 py-2 <?= $currentPage == 'roles.php' ? 'bg-primary text-white' : 'text-white-50'; ?>">
-                <i class="bi bi-shield-lock me-2"></i> Roles
-            </a>
-        </li>
-
-        <li>
-            <a href="students.php"
-               class="nav-link px-3 py-2 <?= $currentPage == 'students.php' ? 'bg-primary text-white' : 'text-white-50'; ?>">
-                <i class="bi bi-person-video3 me-2"></i> Students
-            </a>
-        </li>
+ 
 
         <li>
             <a href="classes.php"
