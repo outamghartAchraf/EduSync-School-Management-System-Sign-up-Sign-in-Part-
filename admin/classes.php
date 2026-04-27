@@ -47,9 +47,21 @@ if(isset($_POST['edit_class'])) {
     $sqlState = $pdo->prepare("SELECT * FROM classes WHERE id = ?");
     $sqlState->execute([$class_id]);
     $editClass = $sqlState->fetch(PDO::FETCH_OBJ);
-
 }
 
+// update class 
+
+if(isset($_POST['update_class'])) {
+    $id = $_POST['id'];
+    $name = htmlspecialchars($_POST['name']);
+    $classroom_number = htmlspecialchars($_POST['classroom_number']);
+
+    $sql = $pdo->prepare("UPDATE classes SET name = ?, classroom_number = ? WHERE id = ?");
+    $sql->execute([$name, $classroom_number, $id]);
+
+    header("Location: " . $_SERVER['PHP_SELF']);
+    exit;
+}
 
 
 ?>
