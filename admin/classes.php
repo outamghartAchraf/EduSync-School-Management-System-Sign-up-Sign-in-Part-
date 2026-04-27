@@ -17,10 +17,16 @@ if ($_SESSION['user']['role_id'] != 1) {
 $sqlState = $pdo->query("SELECT * FROM classes");
 $classes = $sqlState->fetchAll(PDO::FETCH_OBJ);
 
-
-
+// delete class
+if (isset($_POST['delete_class'])) {
+    $class_id = $_POST['class_id'];
+    $deleteStmt = $pdo->prepare("DELETE FROM classes WHERE id = ?");
+    $deleteStmt->execute([$class_id]);
+    header("Location: classes.php");
+    exit;
+    
+}
 ?>
-
 
 <!DOCTYPE html>
 <html lang="en">
@@ -185,9 +191,13 @@ $classes = $sqlState->fetchAll(PDO::FETCH_OBJ);
                                         <button class="btn btn-sm btn-outline-primary">
                                             <i class="bi bi-pencil"></i>  
                                         </button>
-                                        <button class="btn btn-sm btn-outline-danger">
+                         
+                                        <form method="POST" class="d-inline">
+                                            <input type="hidden" name="class_id" value="<?= $class->id ?>">
+                                          <button type="submit" name="delete_class" class="btn btn-sm btn-outline-danger">
                                             <i class="bi bi-trash"></i>  
                                         </button>
+                                        </form>
                                     </td>
                                 </tr>
                             <?php endforeach; ?>
