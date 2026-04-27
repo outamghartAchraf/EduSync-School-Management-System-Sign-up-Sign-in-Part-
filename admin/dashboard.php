@@ -35,26 +35,7 @@ $courses = $pdo->query("SELECT id, title, total_hours FROM courses ORDER BY id D
   <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
   <link href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.min.css" rel="stylesheet">
   
-  <style>
-    body { min-height: 100vh; display: flex; flex-direction: column; }
-     .sidebar {
-      min-width: 240px;
-      max-width: 240px;
-      min-height: 100vh;
-      background: #212529;
-      color: white;
-      position: fixed;
-    }
-    .sidebar .nav-link { color: rgba(255,255,255,0.8); margin-bottom: 5px; }
-    .sidebar .nav-link:hover, .sidebar .nav-link.active { color: white; background: #343a40; border-radius: 5px; }
-    
-     .main-content { margin-left: 240px; width: 100%; }
-    
-    @media (max-width: 768px) {
-      .sidebar { position: relative; min-width: 100%; min-height: auto; }
-      .main-content { margin-left: 0; }
-    }
-  </style>
+  <link rel="stylesheet" href="../assets/css/admin.css">
 </head>
 
 <body class="bg-light">
