@@ -13,6 +13,15 @@ if ($_SESSION['user']['role_id'] != 1) {
     exit;
 }
 
+// get users from database ;
+
+$sqlState = $pdo->query("SELECT users.*, roles.role_name AS role_name 
+FROM users 
+LEFT JOIN roles ON users.role_id = roles.id");
+
+$users = $sqlState->fetchAll(PDO::FETCH_OBJ);
+
+
 
 ?>
 
