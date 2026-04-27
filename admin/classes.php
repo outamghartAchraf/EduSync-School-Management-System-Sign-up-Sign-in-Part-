@@ -269,7 +269,21 @@ if(isset($_POST['update_class'])) {
                                 <?php foreach ($classes as $class): ?>
                                     <tr>
                                         <td><?= $class->id; ?></td>
-                                        <td><?= $class->name; ?></td>
+                                                                                <td>
+                                            <div class="d-flex align-items-center">
+
+                                                <div class="bg-primary text-white rounded-circle d-flex justify-content-center align-items-center me-2"
+                                                    style="width:35px; height:35px;">
+                                                    <?= strtoupper(substr($class->name, 0, 1)); ?>
+                                                </div>
+
+                                                <span>
+                                                    <?= $class->name; ?>
+                                                </span>
+
+                                            </div>
+                                        </td>
+                                       
                                         <td><?= $class->classroom_number; ?></td>
                                         <td>
 
