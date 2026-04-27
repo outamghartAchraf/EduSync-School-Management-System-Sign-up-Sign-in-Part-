@@ -1,0 +1,88 @@
+  
+        body {
+            background: #f8f9fa;
+            min-height: 100vh;
+        }
+
+        .sidebar {
+            min-width: 240px;
+            max-width: 240px;
+            min-height: 100vh;
+            background: #212529;
+            position: fixed;
+            left: 0;
+            top: 0;
+        }
+
+        .main-content {
+            margin-left: 240px;
+            width: 100%;
+            padding: 35px;
+        }
+
+        .page-title {
+            font-weight: 700;
+            color: #212529;
+        }
+
+        .card {
+            border: none;
+            border-radius: 14px;
+            box-shadow: 0 0.5rem 1rem rgba(0, 0, 0, .08);
+        }
+
+        .table thead th {
+            font-size: 14px;
+            letter-spacing: .4px;
+        }
+
+        .table tbody td {
+            vertical-align: middle;
+        }
+
+        .btn {
+            border-radius: 10px;
+        }
+
+        .form-control,
+        .form-select {
+            border-radius: 10px;
+            padding: 10px 14px;
+        }
+
+        .modal-content {
+            border: none;
+            border-radius: 16px;
+            box-shadow: 0 1rem 2rem rgba(0, 0, 0, .15);
+        }
+
+        .search-box {
+            max-width: 260px;
+        }
+
+        .stat-icon {
+            font-size: 38px;
+        }
+
+        @media(max-width:768px) {
+
+            .sidebar {
+                position: relative;
+                min-width: 100%;
+                max-width: 100%;
+                min-height: auto;
+            }
+
+            .main-content {
+                margin-left: 0;
+                padding: 20px;
+            }
+
+            .search-box {
+                max-width: 100%;
+                width: 100%;
+                margin-top: 10px;
+            }
+
+        }
+    
