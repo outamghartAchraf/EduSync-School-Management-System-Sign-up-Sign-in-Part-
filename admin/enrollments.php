@@ -61,6 +61,16 @@ if(isset($_POST['add_enrollment'])) {
   exit;
 }
 
+// delete enrollemnt 
+if(isset($_POST['delete_id'])) {
+  $id = $_POST['delete_id'];
+
+  $sql = $pdo->prepare("DELETE FROM enrollments WHERE id = ?");
+  $sql->execute([$id]);
+
+  header("Location: " . $_SERVER['PHP_SELF']);
+  exit;
+}
 
 
 
