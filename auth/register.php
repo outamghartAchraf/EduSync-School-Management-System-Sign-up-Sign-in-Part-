@@ -43,8 +43,13 @@ if (isset($_POST['register'])) {
         exit;
     }
 
+    $roleState = $pdo->prepare("SELECT id FROM roles WHERE role_name = ?");
+    $roleState->execute(['Student']);
+
+    $role = $roleState->fetch(PDO::FETCH_OBJ);
+
     $sqlS = $pdo->prepare("INSERT INTO users (firstname, lastname, email, password,role_id) VALUES (?, ?, ?, ?, ?)");
-    $sqlS->execute([$firstname, $lastname, $email, password_hash($password, PASSWORD_DEFAULT), 3]);
+    $sqlS->execute([$firstname, $lastname, $email, password_hash($password, PASSWORD_DEFAULT), $role->id]);
     $_SESSION['messageSuccess'] = "registration successful";
     header('location: register.php');
     exit;

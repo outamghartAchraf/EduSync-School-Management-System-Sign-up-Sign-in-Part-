@@ -37,12 +37,11 @@ if (isset($_POST['add_class'])) {
 
     header("Location: " . $_SERVER['PHP_SELF']);
     exit;
-
 }
 
 // get class for editing 
-$editClass = null ;
-if(isset($_POST['edit_class'])) {
+$editClass = null;
+if (isset($_POST['edit_class'])) {
     $class_id = $_POST['class_id'];
     $sqlState = $pdo->prepare("SELECT * FROM classes WHERE id = ?");
     $sqlState->execute([$class_id]);
@@ -51,7 +50,7 @@ if(isset($_POST['edit_class'])) {
 
 // update class 
 
-if(isset($_POST['update_class'])) {
+if (isset($_POST['update_class'])) {
     $id = $_POST['id'];
     $name = htmlspecialchars($_POST['name']);
     $classroom_number = htmlspecialchars($_POST['classroom_number']);
@@ -62,7 +61,6 @@ if(isset($_POST['update_class'])) {
     header("Location: " . $_SERVER['PHP_SELF']);
     exit;
 }
-
 
 ?>
 
@@ -164,51 +162,51 @@ if(isset($_POST['update_class'])) {
 
             </div>
 
- <?php if($editClass): ?>
-<div class="modal fade show" style="display:block; background:rgba(0,0,0,0.5);" tabindex="-1">
-  <div class="modal-dialog modal-dialog-centered">
+            <?php if ($editClass): ?>
+                <div class="modal fade show" style="display:block; background:rgba(0,0,0,0.5);" tabindex="-1">
+                    <div class="modal-dialog modal-dialog-centered">
 
-    <div class="modal-content border-0 shadow">
+                        <div class="modal-content border-0 shadow">
 
-      <div class="modal-header bg-warning">
-        <h5 class="modal-title">
-          <i class="bi bi-pencil"></i> Edit Class
-        </h5>
-        <a href="<?= $_SERVER['PHP_SELF'] ?>" class="btn-close"></a>
-      </div>
+                            <div class="modal-header bg-warning">
+                                <h5 class="modal-title">
+                                    <i class="bi bi-pencil"></i> Edit Class
+                                </h5>
+                                <a href="<?= $_SERVER['PHP_SELF'] ?>" class="btn-close"></a>
+                            </div>
 
-      <form method="POST">
+                            <form method="POST">
 
-        <div class="modal-body p-4">
+                                <div class="modal-body p-4">
 
-          <input type="hidden" name="id" value="<?= $editClass->id ?>">
+                                    <input type="hidden" name="id" value="<?= $editClass->id ?>">
 
-          <div class="mb-3">
-            <label class="form-label">Class Name</label>
-            <input type="text" name="name" class="form-control" value="<?= $editClass->name ?>" required>
-          </div>
+                                    <div class="mb-3">
+                                        <label class="form-label">Class Name</label>
+                                        <input type="text" name="name" class="form-control" value="<?= $editClass->name ?>" required>
+                                    </div>
 
-          <div class="mb-3">
-            <label class="form-label">Classroom Number</label>
-            <input type="text" name="classroom_number" class="form-control" value="<?= $editClass->classroom_number ?>" required>
-          </div>
+                                    <div class="mb-3">
+                                        <label class="form-label">Classroom Number</label>
+                                        <input type="text" name="classroom_number" class="form-control" value="<?= $editClass->classroom_number ?>" required>
+                                    </div>
 
-        </div>
+                                </div>
 
-        <div class="modal-footer">
-          <a href="<?= $_SERVER['PHP_SELF'] ?>" class="btn btn-secondary">Cancel</a>
-          <button type="submit" name="update_class" class="btn btn-warning">
-            Update Class
-          </button>
-        </div>
+                                <div class="modal-footer">
+                                    <a href="<?= $_SERVER['PHP_SELF'] ?>" class="btn btn-secondary">Cancel</a>
+                                    <button type="submit" name="update_class" class="btn btn-warning">
+                                        Update Class
+                                    </button>
+                                </div>
 
-      </form>
+                            </form>
 
-    </div>
+                        </div>
 
-  </div>
-</div>
-<?php endif; ?>           
+                    </div>
+                </div>
+            <?php endif; ?>
 
             <!-- STATS -->
             <div class="row g-3 mb-4">
@@ -269,7 +267,7 @@ if(isset($_POST['update_class'])) {
                                 <?php foreach ($classes as $class): ?>
                                     <tr>
                                         <td><?= $class->id; ?></td>
-                                                                                <td>
+                                        <td>
                                             <div class="d-flex align-items-center">
 
                                                 <div class="bg-primary text-white rounded-circle d-flex justify-content-center align-items-center me-2"
@@ -283,16 +281,16 @@ if(isset($_POST['update_class'])) {
 
                                             </div>
                                         </td>
-                                       
+
                                         <td><?= $class->classroom_number; ?></td>
                                         <td>
 
-                                        <form method="POST" class="d-inline">
-                                            <input type="hidden" name="class_id" value="<?= $class->id ?>" >
-                                            <button type="submit" name="edit_class" class="btn btn-sm btn-outline-primary">
-                                                <i class="bi bi-pencil"></i>
-                                            </button>
-                                        </form>
+                                            <form method="POST" class="d-inline">
+                                                <input type="hidden" name="class_id" value="<?= $class->id ?>">
+                                                <button type="submit" name="edit_class" class="btn btn-sm btn-outline-primary">
+                                                    <i class="bi bi-pencil"></i>
+                                                </button>
+                                            </form>
 
                                             <form method="POST" class="d-inline">
                                                 <input type="hidden" name="class_id" value="<?= $class->id ?>">
