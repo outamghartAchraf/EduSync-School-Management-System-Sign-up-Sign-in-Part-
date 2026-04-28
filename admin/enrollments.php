@@ -1,3 +1,43 @@
+<?php
+session_start();
+include '../config/db.php';
+
+if (!isset($_SESSION['user']['id'])) {
+    header("location: ../auth/login.php");
+    exit;
+}
+
+// check role
+if ($_SESSION['user']['role_id'] != 1) {
+    header("Location: ../auth/login.php");
+    exit;
+}
+
+// get student and course data from database
+
+$EnrollmentsState =  $pdo->query("
+SELECT 
+    enrollments.id,
+    enrollments.status,
+    students.student_number,
+    users.firstname,
+    users.lastname,
+    courses.title AS course_title
+FROM enrollments
+JOIN students ON enrollments.student_id = students.id
+JOIN users ON students.user_id = users.id
+JOIN courses ON enrollments.course_id = courses.id
+");
+
+
+$studentState = $pdo->query("SELECT id, user_id FROM  students");
+$students = $studentState->fetchAll(PDO::FETCH_OBJ);
+
+$courseState = $pdo->query("SELECT id, title FROM courses");
+$courses = $courseState->fetchAll(PDO::FETCH_OBJ);
+?>
+
+
 <!DOCTYPE html>
 <html lang="en">
 
