@@ -8,3 +8,5 @@ header("location:../login.php");
 exit();
 }
 $professor=$_SESSION['user.id'];
+
+$sql= "SELECT DISTINCT FROM classes.id, classes.nom, classes.classeroom_number";
