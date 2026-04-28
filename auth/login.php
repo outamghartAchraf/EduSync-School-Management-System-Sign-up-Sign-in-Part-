@@ -2,7 +2,7 @@
 session_start();
 include '../config/db.php';
 
-/* If user already logged in */
+ 
 if (isset($_SESSION['user']['id'])) {
 
     if ($_SESSION['user']['role_name'] == 'Admin') {
@@ -17,7 +17,7 @@ if (isset($_SESSION['user']['id'])) {
     }
 }
 
-/* Error Message */
+ 
 $messageError = '';
 
 if (isset($_SESSION['messageError'])) {
@@ -25,7 +25,7 @@ if (isset($_SESSION['messageError'])) {
     unset($_SESSION['messageError']);
 }
 
-/* Login */
+ 
 if (isset($_POST['login'])) {
 
     $email = htmlspecialchars(trim($_POST['email']));
@@ -69,7 +69,7 @@ if (isset($_POST['login'])) {
             exit;
         } else {
             session_destroy();
-            $_SESSION['messageError'] = "Unauthorized role";
+            $_SESSION['messageError'] = "Not found Role role";
             header("Location: login.php");
             exit;
         }

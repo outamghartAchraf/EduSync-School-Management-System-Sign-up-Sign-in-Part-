@@ -33,7 +33,16 @@ $totalCourses = $sqlCourses->fetch(PDO::FETCH_OBJ);
 $sqlClasses = $pdo->query("SELECT COUNT(*) AS total_classes FROM classes");
 $totalClasses = $sqlClasses->fetch(PDO::FETCH_OBJ);
 
+// students by class 
+$sqlClassStats = $pdo->query("
+SELECT classes.name,
+COUNT(students.id) AS total_students
+FROM classes
+LEFT JOIN students ON students.class_id = classes.id
+GROUP BY classes.id
+");
 
+$classStats = $sqlClassStats->fetchAll(PDO::FETCH_OBJ);
 ?>
 
 <!DOCTYPE html>
