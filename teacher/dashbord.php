@@ -10,5 +10,22 @@
 <body>
     
 <h1>Mes classe</h1>
+ <table border="1">
+
+ <tr>
+<td>ID</td>
+<td>Class</td>
+<td>Salle</td>
+<td>Action</td>
+
+
+
+ </tr>
+
+
+
+
+ </table>
+
 </body>
 </html>
