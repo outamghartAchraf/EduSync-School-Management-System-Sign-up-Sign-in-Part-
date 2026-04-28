@@ -23,7 +23,7 @@
 
     <div class="offcanvas-body">
 
-        <ul class="nav nav-pills flex-column gap-2">
+        <ul class="nav nav-pills flex-column gap-4">
 
             <li>
                 <a href="dashboard.php"
