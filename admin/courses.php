@@ -117,13 +117,15 @@ $professors = $profState->fetchAll(PDO::FETCH_OBJ);
                                     </div>
 
                                     <div class="col-md-12">
-                                        <label class="form-label">Professor ID</label>
-
-                                        <input type="number"
-                                            name="prof_id"
-                                            class="form-control"
-                                            placeholder="Enter professor ID"
-                                            required>
+                                        <label class="form-label">Professor </label>
+                                       <select name="prof_id" class="form-select" required >
+                                            <option value="" >Select a professor</option>
+                                            <?php foreach ($professors as $professor): ?>
+                                                <option value="<?= $professor->id ?>">
+                                                    <?= $professor->firstname . ' ' . $professor->lastname ?>
+                                                </option>
+                                            <?php endforeach; ?>
+                                       </select>
                                     </div>
 
                                 </div>
