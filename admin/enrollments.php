@@ -72,6 +72,18 @@ if(isset($_POST['delete_id'])) {
   exit;
 }
 
+// edit enrollment 
+$editEnrollment = null;
+
+if(isset($_POST['edit_id'])) {
+  $id = $_POST['edit_id'];
+
+  $sql = $pdo->prepare("SELECT * FROM enrollments WHERE id = ?");
+  $sql->execute([$id]);
+
+  $editEnrollment = $sql->fetch(PDO::FETCH_OBJ);
+}
+
 
 
 
