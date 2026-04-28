@@ -29,9 +29,20 @@ JOIN users ON students.user_id = users.id
 JOIN courses ON enrollments.course_id = courses.id
 ");
 
+  $enrollments = $EnrollmentsState->fetchAll(PDO::FETCH_OBJ);
 
-$studentState = $pdo->query("SELECT id, user_id FROM  students");
-$students = $studentState->fetchAll(PDO::FETCH_OBJ);
+
+$sqlS = $pdo->query("
+    SELECT 
+        students.id,
+        students.student_number,
+        users.firstname,
+        users.lastname
+    FROM students
+    JOIN users ON students.user_id = users.id
+");
+
+$students = $sqlS->fetchAll(PDO::FETCH_OBJ);
 
 $courseState = $pdo->query("SELECT id, title FROM courses");
 $courses = $courseState->fetchAll(PDO::FETCH_OBJ);
@@ -167,7 +178,7 @@ $courses = $courseState->fetchAll(PDO::FETCH_OBJ);
 
                         <div>
                             <h6 class="text-muted mb-1">Total Enrollments</h6>
-                            <h3 class="fw-bold mb-0"> </h3>
+                            <h3 class="fw-bold mb-0"><?= count($enrollments) ?></h3>
                         </div>
 
                         <i class="bi bi-link-45deg fs-1 text-dark"></i>
@@ -214,8 +225,53 @@ $courses = $courseState->fetchAll(PDO::FETCH_OBJ);
 
                         <tbody>
 
-                            <!-- DATA HERE -->
+              <?php foreach ($enrollments as $enroll): ?>
+                <tr>
+                  <td><?= $enroll->id ?></td>
 
+                  <td>
+                    <div class="fw-semibold">
+                      <?= $enroll->firstname . ' ' . $enroll->lastname ?>
+                    </div>
+                    <small class="text-muted"><?= $enroll->student_number ?></small>
+                  </td>
+
+                  <td>
+                    <span class="badge bg-info text-dark">
+                      <?= $enroll->course_title ?>
+                    </span>
+                  </td>
+
+                  <td>
+                    <?php if ($enroll->status == 'active'): ?>
+                      <span class="badge bg-success">Active</span>
+                    <?php else: ?>
+                      <span class="badge bg-secondary">Completed</span>
+                    <?php endif; ?>
+                  </td>
+
+                  <td>
+
+                    <!-- EDIT -->
+                    <form method="POST" class="d-inline">
+                      <input type="hidden" name="edit_id" value="<?= $enroll->id ?>">
+                      <button type="submit" class="btn btn-sm btn-warning">
+                        <i class="bi bi-pencil"></i>
+                      </button>
+                    </form>
+
+                    <!-- DELETE -->
+                    <form method="POST" class="d-inline">
+                      <input type="hidden" name="delete_id" value="<?= $enroll->id ?>">
+                      <button type="submit" class="btn btn-sm btn-danger"
+                        >
+                        <i class="bi bi-trash"></i>
+                      </button>
+                    </form>
+
+                  </td>
+                </tr>
+              <?php endforeach; ?>
                         </tbody>
 
                     </table>
