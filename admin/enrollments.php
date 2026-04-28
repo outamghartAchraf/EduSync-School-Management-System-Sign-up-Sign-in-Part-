@@ -84,6 +84,19 @@ if (isset($_POST['edit_id'])) {
     $editEnrollment = $sql->fetch(PDO::FETCH_OBJ);
 }
 
+// update enrollment
+if(isset($_POST['update_enrollment'])) {
+  $id = $_POST['id'];
+  $student_id = $_POST['student_id'];
+  $course_id = $_POST['course_id'];
+  $status = $_POST['status'];
+
+  $sql = $pdo->prepare("UPDATE enrollments SET student_id=?, course_id=?, status=? WHERE id=?");
+  $sql->execute([$student_id, $course_id, $status, $id]);
+
+  header("Location: " . $_SERVER['PHP_SELF']);
+  exit;
+}
 
 
 
