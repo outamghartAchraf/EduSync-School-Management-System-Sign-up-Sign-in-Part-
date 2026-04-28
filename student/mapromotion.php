@@ -1,3 +1,22 @@
+
+<?php
+session_start();
+$_SESSION['id_class'] = $user['id_class'];
+include '../config/db.php';
+
+$db = new PDO('mysql:host=localhost;dbname=ecole;charset=utf8', 'root', '');
+
+$id_class = $_SESSION['id_class'];
+
+$sql = "SELECT * FROM students WHERE id_class = :id_class";
+$stmt = $db->prepare($sql);
+$stmt->execute(['id_class' => $id_class]);
+
+$students = $stmt->fetchAll();  ?>
+
+
+
+
 <!DOCTYPE html>
 <html lang="fr">
 <head>
@@ -21,21 +40,13 @@
       <!-- Liste -->
       <ul class="divide-y">
 
-        <li class="p-4 hover:bg-gray-50 font-medium">
-          Asma Tasmat
+
+        <li class="p-4 hover:bg-gray-50 font-medium">          
+        <?= htmlspecialchars($students['id_student']) . " " . htmlspecialchars($students['id-class']); ?>
+
         </li>
 
-        <li class="p-4 hover:bg-gray-50 font-medium">
-          Ahmed Ali
-        </li>
-
-        <li class="p-4 hover:bg-gray-50 font-medium">
-          Sara Ben
-        </li>
-
-        <li class="p-4 hover:bg-gray-50 font-medium">
-          Youssef Karim
-        </li>
+        
 
       </ul>
 

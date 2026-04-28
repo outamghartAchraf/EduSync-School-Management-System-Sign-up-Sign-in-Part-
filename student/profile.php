@@ -2,21 +2,23 @@
 session_start();
 include '../config/db.php';
 
+$id = $_SESSION['user']['id'];
 
+$sqlState = $pdo->prepare("
+    SELECT users.firstname, users.lastname, users.email AS Email, students.id_student
+    FROM users
+    LEFT JOIN students ON users.id_user = students.id_user
+    WHERE users.id_user = ?
+");
 
-$db = new PDO('mysql:host=localhost;dbname=ecole;charset=utf8', 'root', '');
-$sql = "SELECT * FROM users";
-$query = $db->query($sql);
-$users = $query->fetchAll();
+$sqlState->execute([$id]);
 
+$user = $sqlState->fetch(PDO::FETCH_OBJ);
 
-?>
  
+?>
 
-   
-<? if($_SESSION['user']['role_id'] == 3){
-     $user['role_id']; 
-} ?>
+
 
 
 
@@ -33,15 +35,18 @@ $users = $query->fetchAll();
     <div class="bg-white shadow-xl rounded-2xl w-96 overflow-hidden">
         <div class="bg-indigo-500 h-28"></div>
         <div class="text-center p-5">
-            <h2 class="text-2xl font-bold"><?php foreach ($users as $user) { ?>
-                    <h1><?= $user['firstname']; ?></h1>
-                    <p class="text-gray-500"><?= $user['role_id']; ?></p>
-                    <div class="mt-4 text-left space-y-2">
-                        <p><strong>📧 Email :</strong> <?= $user['email']; ?></p>
-                       <?php } ?>
-                    </div>
+            <h2 class="text-2xl font-bold">
+                <?php if ($user): ?>
+                    <h1><?= $user->firstname ?></h1>
+                    <p><?= $user->lastname ?></p>
+                    <p><?= $user->Email ?></p>
+                <?php else: ?>
+                    <p>User not found</p>
+                <?php endif; ?>
+
         </div>
-         </div>
+    </div>
+    </div>
     </div>
 </body>
 

@@ -2,60 +2,81 @@
 session_start();
 include '../config/db.php';
 
+
 if (isset($_SESSION['user']['id'])) {
 
-    if ($_SESSION['user']['role_id'] == 1) {
-        header("Location: ../admin/dashboard.php");
-    } else if ($_SESSION['user']['role_id'] == 3) {
-        header("Location: ../student/dashboard.php");
-    }
+    $role = $_SESSION['user']['label_r'];
 
-    exit;
+    if ($role == 'admin') {
+        header("Location: ../admin/dashboard.php");
+        exit;
+    } elseif ($role == 'student') {
+        header("Location: ../student/dashboard.php");
+        exit;
+    } elseif ($role == 'prof') {
+        header("Location: ../professor/dashboard.php");
+        exit;
+    }
 }
 
+
 $messageError = '';
+
 if (isset($_SESSION['messageError'])) {
     $messageError = $_SESSION['messageError'];
     unset($_SESSION['messageError']);
 }
 
 if (isset($_POST['login'])) {
-    $email = htmlspecialchars($_POST['email']);
+
+    $email = trim($_POST['email']);
     $password = $_POST['password'];
 
     if (empty($email) || empty($password)) {
-        $_SESSION['messageError'] = "email and password required";
-        header("location: login.php");
+        $_SESSION['messageError'] = "Email and password required";
+        header("Location: login.php");
         exit;
     }
 
-    $sqlState = $pdo->prepare("SELECT * FROM users WHERE email = ?");
+    $sqlState = $pdo->prepare("
+        SELECT users.*, roles.label_r
+        FROM users
+        JOIN roles ON users.role_id = roles.role_id
+        WHERE users.email = ?
+    ");
+
     $sqlState->execute([$email]);
     $user = $sqlState->fetch(PDO::FETCH_OBJ);
-
 
     if ($user && password_verify($password, $user->password)) {
 
         $_SESSION['user'] = [
-            'id' => $user->id,
+            'id'        => $user->id_user,   
             'firstname' => $user->firstname,
-            'lastname' => $user->lastname,
-            'email' => $user->email,
-            'role_id' => $user->role_id
+            'lastname'  => $user->lastname,
+            'email'     => $user->email,
+            'role_id'   => $user->role_id,
+            'label_r'   => $user->label_r
         ];
-       
 
-        if ($user->role_id == 1) {
-            header("location: ../admin/dashboard.php");
-            exit;
-        } else if ($user->role_id == 3) {
-            header("location: ../student/dashboard.php");
-            exit;
+ 
+        if ($_SESSION['user']['label_r'] == 'admin') {
+            header("Location: ../admin/dashboard.php");
+        } elseif ($_SESSION['user']['label_r'] == 'student') {
+            header("Location: ../student/dashboard.php");
+        } elseif ($_SESSION['user']['label_r'] == 'prof') {
+            header("Location: ../professor/dashboard.php");
+        } else {
+            session_destroy();
+            $_SESSION['messageError'] = "Role not found";
+            header("Location: login.php");
         }
-    } else {
 
+        exit;
+
+    } else {
         $_SESSION['messageError'] = "Email ou mot de passe incorrect";
-        header("location: login.php");
+        header("Location: login.php");
         exit;
     }
 }
@@ -76,12 +97,21 @@ if (isset($_POST['login'])) {
     <div class="container h-100">
         <div class="row justify-content-center align-items-center w-100 h-100">
             <div class="col-12 col-lg-10 col-xl-9">
+
                 <div class="card border-0 shadow-lg overflow-hidden">
                     <div class="row g-0">
+
                         <div class="col-md-5 bg-primary text-white p-4 p-lg-5 d-flex flex-column justify-content-center">
-                            <span class="badge rounded-pill text-bg-light text-primary mb-3 w-auto">EduSync Portal</span>
+                            <span class="badge rounded-pill text-bg-light text-primary mb-3 w-auto">
+                                EduSync Portal
+                            </span>
+
                             <h1 class="h3 fw-bold mb-3">Welcome Back</h1>
-                            <p class="mb-4">Log in to continue managing your school dashboard and student activities.</p>
+
+                            <p class="mb-4">
+                                Log in to continue managing your school dashboard and student activities.
+                            </p>
+
                             <ul class="list-unstyled small mb-0">
                                 <li class="mb-2">- Secure account access</li>
                                 <li class="mb-2">- Fast and simple login</li>
@@ -90,41 +120,59 @@ if (isset($_POST['login'])) {
                         </div>
 
                         <div class="col-md-7 bg-white p-4 p-lg-5">
+
                             <h2 class="h4 fw-bold mb-1">Login</h2>
                             <p class="text-muted mb-4">Enter your credentials to continue.</p>
 
                             <?php if ($messageError): ?>
-                                <div class="alert alert-danger"><?= htmlspecialchars($messageError) ?></div>
+                                <div class="alert alert-danger">
+                                    <?= htmlspecialchars($messageError) ?>
+                                </div>
                             <?php endif; ?>
 
                             <form method="POST">
 
                                 <div class="mb-3">
                                     <label class="form-label">Email</label>
-                                    <input type="email" name="email" class="form-control form-control-lg" placeholder="Email Address"  >
+                                    <input
+                                        type="email"
+                                        name="email"
+                                        class="form-control form-control-lg"
+                                        placeholder="Email Address"
+                                    >
                                 </div>
 
                                 <div class="mb-4">
                                     <label class="form-label">Password</label>
-                                    <input type="password" name="password" class="form-control form-control-lg" placeholder="Password"  >
+                                    <input
+                                        type="password"
+                                        name="password"
+                                        class="form-control form-control-lg"
+                                        placeholder="Password"
+                                    >
                                 </div>
 
-                                <button type="submit" name="login" class="btn btn-primary btn-lg w-100">Login</button>
+                                <button type="submit" name="login" class="btn btn-primary btn-lg w-100">
+                                    Login
+                                </button>
 
                             </form>
 
                             <p class="text-center text-muted mt-4 mb-0">
-                                Dont have an account?
-                                <a href="register.php" class="link-primary fw-semibold text-decoration-none">Create account</a>
+                                Don't have an account?
+                                <a href="register.php" class="link-primary fw-semibold text-decoration-none">
+                                    Create account
+                                </a>
                             </p>
+
                         </div>
+
                     </div>
                 </div>
+
             </div>
         </div>
     </div>
 
-
 </body>
-
 </html>
