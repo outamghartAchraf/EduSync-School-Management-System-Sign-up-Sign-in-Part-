@@ -20,6 +20,12 @@ $sqlState = $pdo->prepare("SELECT courses.*, users.firstname AS prof_firstname, 
 $sqlState->execute();
 $courses = $sqlState->fetchAll(PDO::FETCH_OBJ);
 
+// get professors for dropdown 
+$profState = $pdo->prepare("SELECT users.id, users.firstname, users.lastname FROM users JOIN roles ON users.role_id = roles.id WHERE roles.role_name = 'Professor'");
+$profState->execute();
+$professors = $profState->fetchAll(PDO::FETCH_OBJ);
+
+
 ?>
 
 <!DOCTYPE html>
@@ -198,7 +204,20 @@ $courses = $sqlState->fetchAll(PDO::FETCH_OBJ);
                                 <?php foreach ($courses as $course): ?>
                                     <tr>
                                         <td><?= $course->id ?></td>
-                                        <td><?= $course->title ?></td>
+                                                                        <td>
+                                            <div class="d-flex align-items-center">
+
+                                                <div class="bg-primary text-white rounded-circle d-flex justify-content-center align-items-center me-2"
+                                                    style="width:35px; height:35px;">
+                                                    <?= strtoupper(substr($course->title, 0, 1)); ?>
+                                                </div>
+
+                                                <span>
+                                                    <?= $course->title; ?>
+                                                </span>
+
+                                            </div>
+                                        </td>
                                         <td><?= $course->total_hours ?></td>
                                         <td><?= $course->prof_firstname . ' ' . $course->prof_lastname ?></td>
                                         <td>
