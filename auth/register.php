@@ -45,7 +45,6 @@ if (isset($_POST['register'])) {
 
     $roleState = $pdo->prepare("SELECT id FROM roles WHERE role_name = ?");
     $roleState->execute(['Student']);
-
     $role = $roleState->fetch(PDO::FETCH_OBJ);
 
     $sqlS = $pdo->prepare("INSERT INTO users (firstname, lastname, email, password,role_id) VALUES (?, ?, ?, ?, ?)");
@@ -54,7 +53,6 @@ if (isset($_POST['register'])) {
     header('location: register.php');
     exit;
 }
-
 
 ?>
 
