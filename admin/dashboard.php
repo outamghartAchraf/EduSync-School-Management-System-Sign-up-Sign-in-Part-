@@ -15,7 +15,17 @@ if ($_SESSION['user']['role_id'] != 1) {
 // total students
 $sqlStudents = $pdo->query("SELECT COUNT(*) AS total_students FROM students");
 $totalStudents = $sqlStudents->fetch(PDO::FETCH_OBJ);
- 
+
+// total teachers
+$sqlTeachers = $pdo->query("
+SELECT COUNT(*) AS total_teachers
+FROM users u
+JOIN roles r ON u.role_id = r.id
+WHERE r.role_name = 'Professor'
+");
+$totalTeachers = $sqlTeachers->fetch(PDO::FETCH_OBJ);
+
+
 ?>
 
 <!DOCTYPE html>
