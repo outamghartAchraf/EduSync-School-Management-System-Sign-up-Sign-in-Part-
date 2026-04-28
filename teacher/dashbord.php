@@ -12,13 +12,11 @@
 <h1>Mes classe</h1>
  <table border="1">
 
- <tr>
-<td>ID</td>
-<td>Class</td>
-<td>Salle</td>
-<td>Action</td>
-
-
+ <tr class="bg-blue-400">
+<td class="border p-2"> ID</td>
+<td class="border p-2"> Class</td>
+<td class="border p-2">Salle</td>
+<td class="border p-2"> Action</td>
 
  </tr>
 
