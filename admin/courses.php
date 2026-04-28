@@ -27,12 +27,13 @@ $professors = $profState->fetchAll(PDO::FETCH_OBJ);
 
 // add new course 
 if (isset($_POST['add_course'])) {
-    $title = $_POST['title'];
-    $total_hours = $_POST['total_hours'];
+    $title = htmlspecialchars($_POST['title']);
+    $description = htmlspecialchars($_POST['description']);
+    $total_hours = htmlspecialchars($_POST['total_hours']);
     $prof_id = $_POST['prof_id'];
 
-    $courseState = $pdo->prepare("INSERT INTO courses (title, total_hours, prof_id) VALUES (?, ?, ?)");
-    $courseState->execute([$title, $total_hours, $prof_id]);
+    $courseState = $pdo->prepare("INSERT INTO courses (title, description, total_hours, prof_id) VALUES (?, ?, ?)");
+    $courseState->execute([$title, $description, $total_hours, $prof_id]);
     header("Location: " . $_SERVER['PHP_SELF']);
     exit;
 }
@@ -54,6 +55,19 @@ if (isset($_POST['edit_course'])) {
     $courseState = $pdo->prepare("SELECT * FROM courses WHERE id = ?");
     $courseState->execute([$course_id]);
     $editCourse = $courseState->fetch(PDO::FETCH_OBJ);
+}
+
+// update course 
+if(isset($_POST['update_course'])) {
+    $course_id = $_POST['course_id'];
+    $title = htmlspecialchars($_POST['title']);
+    $description = htmlspecialchars($_POST['description']);
+    $total_hours = htmlspecialchars($_POST['total_hours']);
+
+    $updateState = $pdo->prepare("UPDATE courses SET title = ?, description = ?, total_hours = ? WHERE id = ?");
+    $updateState->execute([$title, $description, $total_hours, $course_id]);
+    header("Location: " . $_SERVER['PHP_SELF']);
+    exit;
 }
 
 
