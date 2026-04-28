@@ -25,6 +25,18 @@ $profState = $pdo->prepare("SELECT users.id, users.firstname, users.lastname FRO
 $profState->execute();
 $professors = $profState->fetchAll(PDO::FETCH_OBJ);
 
+// add new course 
+if(isset($_POST['add_course'])) {
+    $title = $_POST['title'];
+    $total_hours = $_POST['total_hours'];
+    $prof_id = $_POST['prof_id'];
+
+    $courseState = $pdo->prepare("INSERT INTO courses (title, total_hours, prof_id) VALUES (?, ?, ?)");
+    $courseState->execute([$title, $total_hours, $prof_id]);
+    header("Location: " . $_SERVER['PHP_SELF']);
+    exit;
+}
+
 
 ?>
 
