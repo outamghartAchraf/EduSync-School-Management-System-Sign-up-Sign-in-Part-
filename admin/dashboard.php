@@ -25,6 +25,14 @@ WHERE r.role_name = 'Professor'
 ");
 $totalTeachers = $sqlTeachers->fetch(PDO::FETCH_OBJ);
 
+// total courese
+$sqlCourses = $pdo->query("SELECT COUNT(*) AS total_courses FROM courses");
+$totalCourses = $sqlCourses->fetch(PDO::FETCH_OBJ);
+
+// total classes
+$sqlClasses = $pdo->query("SELECT COUNT(*) AS total_classes FROM classes");
+$totalClasses = $sqlClasses->fetch(PDO::FETCH_OBJ);
+
 
 ?>
 
