@@ -26,7 +26,7 @@ $profState->execute();
 $professors = $profState->fetchAll(PDO::FETCH_OBJ);
 
 // add new course 
-if(isset($_POST['add_course'])) {
+if (isset($_POST['add_course'])) {
     $title = $_POST['title'];
     $total_hours = $_POST['total_hours'];
     $prof_id = $_POST['prof_id'];
@@ -38,12 +38,22 @@ if(isset($_POST['add_course'])) {
 }
 
 // delete course 
-if(isset($_POST['delete_course'])) {
+if (isset($_POST['delete_course'])) {
     $course_id = $_POST['course_id'];
     $deletState = $pdo->prepare("DELETE FROM courses WHERE id = ?");
     $deletState->execute([$course_id]);
     header("Location: " . $_SERVER['PHP_SELF']);
     exit;
+}
+
+// edit course 
+
+$editCourse = null;
+if (isset($_POST['edit_course'])) {
+    $course_id = $_POST['course_id'];
+    $courseState = $pdo->prepare("SELECT * FROM courses WHERE id = ?");
+    $courseState->execute([$course_id]);
+    $editCourse = $courseState->fetch(PDO::FETCH_OBJ);
 }
 
 
@@ -139,14 +149,14 @@ if(isset($_POST['delete_course'])) {
 
                                     <div class="col-md-12">
                                         <label class="form-label">Professor </label>
-                                       <select name="prof_id" class="form-select" required >
-                                            <option value="" >Select a professor</option>
+                                        <select name="prof_id" class="form-select" required>
+                                            <option value="">Select a professor</option>
                                             <?php foreach ($professors as $professor): ?>
                                                 <option value="<?= $professor->id ?>">
                                                     <?= $professor->firstname . ' ' . $professor->lastname ?>
                                                 </option>
                                             <?php endforeach; ?>
-                                       </select>
+                                        </select>
                                     </div>
 
                                 </div>
@@ -167,6 +177,98 @@ if(isset($_POST['delete_course'])) {
                 </div>
 
             </div>
+
+
+            <?php if ($editCourse): ?>
+
+                <div class="modal fade show d-block" tabindex="-1" style="background: rgba(0,0,0,0.5);">
+
+                    <div class="modal-dialog modal-lg modal-dialog-centered">
+                        <div class="modal-content border-0 shadow">
+
+                            <div class="modal-header bg-info text-white">
+                                <h5 class="modal-title fw-bold">
+                                    <i class="bi bi-pencil-square me-1"></i> Edit Course
+                                </h5>
+
+                                <a href="<?= $_SERVER['PHP_SELF']; ?>" class="btn-close btn-close-white"></a>
+                            </div>
+
+                            <div class="modal-body p-4">
+
+                                <form method="POST">
+
+                                    <input type="hidden" name="course_id" value="<?= $editCourse->id; ?>">
+
+                                    <div class="row g-3">
+
+                                        <div class="col-md-6">
+                                            <label class="form-label">Course Title</label>
+
+                                            <input type="text"
+                                                name="title"
+                                                class="form-control"
+                                                value="<?= $editCourse->title; ?>"
+                                                required>
+                                        </div>
+
+                                        <div class="col-md-6">
+                                            <label class="form-label">Total Hours</label>
+
+                                            <input type="number"
+                                                name="total_hours"
+                                                class="form-control"
+                                                value="<?= $editCourse->total_hours; ?>"
+                                                required>
+                                        </div>
+
+                                        <div class="col-12">
+                                            <label class="form-label">Description</label>
+
+                                            <textarea
+                                                name="description"
+                                                class="form-control"
+                                                rows="3"><?= $editCourse->description; ?></textarea>
+                                        </div>
+
+                                        <div class="col-md-12">
+                                            <label class="form-label">Professor</label>
+
+                                            <select name="prof_id" class="form-select" required>
+                                                <option value="">Select a professor</option>
+
+                                                <?php foreach ($professors as $professor): ?>
+                                                    <option value="<?= $professor->id; ?>"
+                                                        <?= $professor->id == $editCourse->prof_id ? 'selected' : ''; ?>>
+
+                                                        <?= $professor->firstname . ' ' . $professor->lastname; ?>
+
+                                                    </option>
+                                                <?php endforeach; ?>
+
+                                            </select>
+                                        </div>
+
+                                    </div>
+
+                                    <div class="mt-4">
+                                        <button type="submit"
+                                            name="update_course"
+                                            class="btn btn-info w-100">
+                                            Update Course
+                                        </button>
+                                    </div>
+
+                                </form>
+
+                            </div>
+
+                        </div>
+                    </div>
+
+                </div>
+
+            <?php endif; ?>
 
             <!-- STATS -->
             <div class="row g-3 mb-4">
@@ -227,7 +329,7 @@ if(isset($_POST['delete_course'])) {
                                 <?php foreach ($courses as $course): ?>
                                     <tr>
                                         <td><?= $course->id ?></td>
-                                                                        <td>
+                                        <td>
                                             <div class="d-flex align-items-center">
 
                                                 <div class="bg-primary text-white rounded-circle d-flex justify-content-center align-items-center me-2"
@@ -244,19 +346,19 @@ if(isset($_POST['delete_course'])) {
                                         <td><?= $course->total_hours ?></td>
                                         <td><?= $course->prof_firstname . ' ' . $course->prof_lastname ?></td>
                                         <td>
-                                      <form method="POST" class="d-inline">
-                                            <input type="hidden" name="course_id" value="<?= $course->id ?>">
-                                            <button type="submit" name="edit_course" class="btn btn-sm btn-outline-primary">
-                                                <i class="bi bi-pencil"></i>
-                                            </button>
-                                      </form>
+                                            <form method="POST" class="d-inline">
+                                                <input type="hidden" name="course_id" value="<?= $course->id ?>">
+                                                <button type="submit" name="edit_course" class="btn btn-sm btn-outline-primary">
+                                                    <i class="bi bi-pencil"></i>
+                                                </button>
+                                            </form>
 
-                                        <form method="POST" class="d-inline">
-                                            <input type="hidden" name="course_id" value="<?= $course->id ?>">
-                                            <button type="submit" name="delete_course" class="btn btn-sm btn-outline-danger">
-                                                <i class="bi bi-trash"></i>
-                                            </button>
-                                        </form>    
+                                            <form method="POST" class="d-inline">
+                                                <input type="hidden" name="course_id" value="<?= $course->id ?>">
+                                                <button type="submit" name="delete_course" class="btn btn-sm btn-outline-danger">
+                                                    <i class="bi bi-trash"></i>
+                                                </button>
+                                            </form>
 
                                         </td>
                                     </tr>
