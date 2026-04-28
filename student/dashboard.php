@@ -2,6 +2,7 @@
 session_start();
 include '../config/db.php';
 
+
  
  
 ?>
@@ -120,30 +121,8 @@ include '../config/db.php';
 
       
 
-            <div class="col-12 col-lg-4">
-                <div class="card border-0 shadow-sm">
-                    <div class="card-header bg-white py-3 border-0">
-                        <h5 class="mb-0 fw-bold">Upcoming Events</h5>
-                    </div>
-                    <div class="card-body">
-                        <div class="d-flex mb-3">
-                            <div class="badge bg-primary-subtle text-primary p-2 rounded me-3"><i class="bi bi-calendar-event"></i></div>
-                            <div>
-                                <p class="mb-0 fw-semibold small">Math Midterm Exam</p>
-                                <span class="text-muted extra-small">April 25, 2026</span>
-                            </div>
-                        </div>
-                        <div class="d-flex mb-3">
-                            <div class="badge bg-warning-subtle text-warning p-2 rounded me-3"><i class="bi bi-file-earmark"></i></div>
-                            <div>
-                                <p class="mb-0 fw-semibold small">Physics Assignment</p>
-                                <span class="text-muted extra-small">April 22, 2026</span>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-            </div>
-        </div>
+          
+       
 
         <div class="row g-3 mt-3">
             <div class="col-12">

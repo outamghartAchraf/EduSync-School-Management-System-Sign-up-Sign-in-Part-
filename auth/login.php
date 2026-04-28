@@ -43,6 +43,7 @@ if (isset($_POST['login'])) {
             'email' => $user->email,
             'role_id' => $user->role_id
         ];
+       
 
         if ($user->role_id == 1) {
             header("location: ../admin/dashboard.php");
@@ -113,7 +114,7 @@ if (isset($_POST['login'])) {
                             </form>
 
                             <p class="text-center text-muted mt-4 mb-0">
-                                Don&apos;t have an account?
+                                Dont have an account?
                                 <a href="register.php" class="link-primary fw-semibold text-decoration-none">Create account</a>
                             </p>
                         </div>
