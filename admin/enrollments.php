@@ -46,6 +46,25 @@ $students = $sqlS->fetchAll(PDO::FETCH_OBJ);
 
 $courseState = $pdo->query("SELECT id, title FROM courses");
 $courses = $courseState->fetchAll(PDO::FETCH_OBJ);
+
+// add new enrollment 
+
+if(isset($_POST['add_enrollment'])) {
+    $student_id = $_POST['student_id'];
+    $course_id = $_POST['course_id'];
+    $status = htmlspecialchars($_POST['status']);
+
+ $sql = $pdo->prepare("INSERT INTO enrollments (student_id, course_id, status) VALUES (?, ?, ?)");
+  $sql->execute([$student_id, $course_id, $status]);
+
+  header("Location: " . $_SERVER['PHP_SELF']);
+  exit;
+}
+
+
+
+
+
 ?>
 
 
@@ -252,7 +271,7 @@ $courses = $courseState->fetchAll(PDO::FETCH_OBJ);
 
                   <td>
 
-                    <!-- EDIT -->
+                  
                     <form method="POST" class="d-inline">
                       <input type="hidden" name="edit_id" value="<?= $enroll->id ?>">
                       <button type="submit" class="btn btn-sm btn-warning">
@@ -260,7 +279,7 @@ $courses = $courseState->fetchAll(PDO::FETCH_OBJ);
                       </button>
                     </form>
 
-                    <!-- DELETE -->
+                 
                     <form method="POST" class="d-inline">
                       <input type="hidden" name="delete_id" value="<?= $enroll->id ?>">
                       <button type="submit" class="btn btn-sm btn-danger"
