@@ -14,3 +14,7 @@ from classes
 join courses
 on courses.prof_id =:prof_id
 ";
+
+$stm=$pdo->prepare($sql);
+$stm=$pdo->execute([ 'prof_id'=>$prof_id ]);
+
