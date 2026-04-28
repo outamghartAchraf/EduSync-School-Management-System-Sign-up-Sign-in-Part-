@@ -12,7 +12,10 @@ if ($_SESSION['user']['role_id'] != 1) {
   exit;
 }
 
-
+// total students
+$sqlStudents = $pdo->query("SELECT COUNT(*) AS total_students FROM students");
+$totalStudents = $sqlStudents->fetch(PDO::FETCH_OBJ);
+ 
 ?>
 
 <!DOCTYPE html>
