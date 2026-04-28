@@ -1,6 +1,6 @@
 <?php $currentPage = basename($_SERVER['PHP_SELF']); ?>
 
-<!-- MOBILE TOPBAR -->
+ 
 <nav class="navbar navbar-dark bg-dark d-md-none px-3">
     
     <a href="dashboard.php" class="navbar-brand fw-bold">
@@ -13,7 +13,7 @@
 
 </nav>
 
-<!-- MOBILE SIDEBAR -->
+ 
 <div class="offcanvas offcanvas-start bg-dark text-white d-md-none" tabindex="-1" id="mobileSidebar">
 
     <div class="offcanvas-header">
@@ -73,7 +73,7 @@
     </div>
 </div>
 
-<!-- DESKTOP SIDEBAR -->
+
 <nav class="sidebar p-3 shadow bg-dark d-none d-md-block">
 
     <a href="dashboard.php" class="d-flex align-items-center mb-4 text-white text-decoration-none">

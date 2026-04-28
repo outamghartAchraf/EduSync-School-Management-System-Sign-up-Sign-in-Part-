@@ -37,6 +37,15 @@ if(isset($_POST['add_course'])) {
     exit;
 }
 
+// delete course 
+if(isset($_POST['delete_course'])) {
+    $course_id = $_POST['course_id'];
+    $deletState = $pdo->prepare("DELETE FROM courses WHERE id = ?");
+    $deletState->execute([$course_id]);
+    header("Location: " . $_SERVER['PHP_SELF']);
+    exit;
+}
+
 
 ?>
 
@@ -235,12 +244,20 @@ if(isset($_POST['add_course'])) {
                                         <td><?= $course->total_hours ?></td>
                                         <td><?= $course->prof_firstname . ' ' . $course->prof_lastname ?></td>
                                         <td>
+                                      <form method="POST" class="d-inline">
+                                            <input type="hidden" name="course_id" value="<?= $course->id ?>">
                                             <button type="submit" name="edit_course" class="btn btn-sm btn-outline-primary">
                                                 <i class="bi bi-pencil"></i>
                                             </button>
+                                      </form>
+
+                                        <form method="POST" class="d-inline">
+                                            <input type="hidden" name="course_id" value="<?= $course->id ?>">
                                             <button type="submit" name="delete_course" class="btn btn-sm btn-outline-danger">
                                                 <i class="bi bi-trash"></i>
                                             </button>
+                                        </form>    
+
                                         </td>
                                     </tr>
                                 <?php endforeach; ?>
