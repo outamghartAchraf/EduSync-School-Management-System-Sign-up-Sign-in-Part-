@@ -10,3 +10,7 @@ $course_id = $_GET['course_id'] ?? null;
 if (! $course_id){ header("Location: mycourses.php"); 
 exit;
 }
+$stmt = $conn->prepare($query);
+$stmt->execute([$course_id]);
+$students = $stmt->fetchAll(PDO::FETCH_ASSOC);
+?>
