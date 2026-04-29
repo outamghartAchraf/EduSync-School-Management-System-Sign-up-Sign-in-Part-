@@ -6,3 +6,7 @@ if (!isset($_SESSION['user_id']) || $_SESSION['role'] !== 'prof') {
     header("Location: ../auth/login.php");
     exit;
 }
+$course_id = $_GET['course_id'] ?? null;
+if (! $course_id){ header("Location: mycourses.php"); 
+exit;
+}
