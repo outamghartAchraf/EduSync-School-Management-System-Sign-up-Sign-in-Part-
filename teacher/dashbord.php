@@ -8,6 +8,9 @@
     <link rel="stylesheet" href="style.css">
 </head>
 <body>
+    <h3>
+Bienvenue <?= $prof['firstname'] ?> <?= $prof['lastname'] ?>
+</h3>
     
 <h1>Mes classe</h1>
  <table border="1">
@@ -19,9 +22,17 @@
 <td class="border p-2"> Action</td>
 
  </tr>
+<?php foreach ($classes as $class):?>
+
+     <tr class="bg-blue-400">
+<td class="border p-2"><?= $class['id']?></td>
+<td class="border p-2"><?= $class['name']?></td>
+<td class="border p-2"><?= $class['classroom_number']?></td>
 
 
+ </tr>
 
+<?php endforeach; ?>
 
  </table>
 
