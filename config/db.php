@@ -1,7 +1,7 @@
 <?php
 try {
     $pdo = new PDO(
-        "mysql:host=localhost;dbname=ecole;charset=utf8mb4",
+        "mysql:host=localhost;dbname=edusync;charset=utf8mb4",
         "root",
         ""
     );

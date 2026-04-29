@@ -21,9 +21,8 @@ if (isset($_POST['register'])) {
     $email     = htmlspecialchars($_POST['email']);
     $password  = $_POST['password'];
     $confirm   = $_POST['confirm_password'];
-    
 
-    if (empty($firstname) || empty($lastname) || empty($email) || empty($role)) {
+    if (empty($firstname) || empty($lastname) || empty($email)) {
         $_SESSION['messageError'] = "first name and last name and email required";
         header("location: register.php");
         exit;
@@ -44,13 +43,16 @@ if (isset($_POST['register'])) {
         exit;
     }
 
-    $sqlS = $pdo->prepare("INSERT INTO users (firstname, lastname, email, password,role_id ) VALUES (?, ?, ?, ?, ?)");
-    $sqlS->execute([$firstname, $lastname, $email, password_hash($password, PASSWORD_DEFAULT), 3]);
+    $roleState = $pdo->prepare("SELECT id FROM roles WHERE role_name = ?");
+    $roleState->execute(['Student']);
+    $role = $roleState->fetch(PDO::FETCH_OBJ);
+
+    $sqlS = $pdo->prepare("INSERT INTO users (firstname, lastname, email, password,role_id) VALUES (?, ?, ?, ?, ?)");
+    $sqlS->execute([$firstname, $lastname, $email, password_hash($password, PASSWORD_DEFAULT), $role->id]);
     $_SESSION['messageSuccess'] = "registration successful";
     header('location: register.php');
     exit;
 }
-
 
 ?>
 
@@ -116,8 +118,8 @@ if (isset($_POST['register'])) {
                                 <div class="mb-4">
                                     <input type="password" name="confirm_password" class="form-control form-control-lg" placeholder="Confirm Password">
                                 </div>
+
                                 <button type="submit" name="register" class="btn btn-success btn-lg w-100">Create Account</button>
-                                
                             </form>
 
                             <p class="text-center text-muted mt-4 mb-0">

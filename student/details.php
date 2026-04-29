@@ -1,3 +1,32 @@
+<?php
+session_start();
+include '../config/db.php';
+
+
+if (!isset($_SESSION['user'])) {
+    header('Location: ../auth/login.php');
+    exit();
+}
+
+$id = $_SESSION['user']['id'];
+
+
+$sqlState = $pdo->prepare("
+    SELECT 
+        c.title,
+        c.description,
+        c.total_hours
+    FROM users u
+    INNER JOIN students s ON u.id = s.user_id
+    INNER JOIN enrollments e ON e.student_id = s.id
+    INNER JOIN courses c ON c.id = e.course_id
+    WHERE u.id = ?
+");
+
+$sqlState->execute([$id]);
+$courses = $sqlState->fetchAll(PDO::FETCH_OBJ);
+?>
+
 <!DOCTYPE html>
 <html lang="fr">
 <head>
@@ -6,65 +35,54 @@
   <script src="https://cdn.tailwindcss.com"></script>
 </head>
 
-<body class="bg-gray-100 p-6">
+<body class="bg-gradient-to-r from-indigo-100 to-purple-100 min-h-screen p-6">
 
-  <div class="max-w-4xl mx-auto">
+<div class="max-w-6xl mx-auto">
 
-    <!-- Titre -->
-    <h1 class="text-2xl font-bold text-center mb-6">
-      📚 Mes matières
-    </h1>
+  <div class="flex justify-between items-center mb-8">
+    <h1 class="text-3xl font-bold text-gray-800">📚 Mes matières</h1>
 
-    <!-- Cards -->
-    <div class="grid md:grid-cols-2 gap-4">
+    
+  </div>
 
-      <!-- Matière 1 -->
-      <div class="bg-white p-5 rounded-xl shadow hover:shadow-md transition">
-        <h2 class="text-xl font-bold text-indigo-600">Mathématiques</h2>
-        <p class="text-gray-600 mt-2">
-          Étude des fonctions, algèbre et statistiques.
-        </p>
-        <p class="mt-3 text-sm font-semibold text-gray-700">
-          ⏱ Volume horaire : 6 heures / semaine
-        </p>
-      </div>
+ 
+  <div class="grid sm:grid-cols-2 lg:grid-cols-3 gap-6">
 
-      <!-- Matière 2 -->
-      <div class="bg-white p-5 rounded-xl shadow hover:shadow-md transition">
-        <h2 class="text-xl font-bold text-indigo-600">Informatique</h2>
-        <p class="text-gray-600 mt-2">
-          Programmation web, bases de données et algorithmique.
-        </p>
-        <p class="mt-3 text-sm font-semibold text-gray-700">
-          ⏱ Volume horaire : 5 heures / semaine
-        </p>
-      </div>
+    <?php if (!empty($courses)): ?>
 
-      <!-- Matière 3 -->
-      <div class="bg-white p-5 rounded-xl shadow hover:shadow-md transition">
-        <h2 class="text-xl font-bold text-indigo-600">Anglais</h2>
-        <p class="text-gray-600 mt-2">
-          Communication orale et écrite en anglais.
-        </p>
-        <p class="mt-3 text-sm font-semibold text-gray-700">
-          ⏱ Volume horaire : 3 heures / semaine
-        </p>
-      </div>
+        <?php foreach($courses as $course): ?>
 
-      <!-- Matière 4 -->
-      <div class="bg-white p-5 rounded-xl shadow hover:shadow-md transition">
-        <h2 class="text-xl font-bold text-indigo-600">Réseaux</h2>
-        <p class="text-gray-600 mt-2">
-          Introduction aux réseaux informatiques et protocoles.
-        </p>
-        <p class="mt-3 text-sm font-semibold text-gray-700">
-          ⏱ Volume horaire : 4 heures / semaine
-        </p>
-      </div>
+        <div class="bg-white p-5 rounded-2xl shadow hover:shadow-xl transition duration-300">
 
-    </div>
+            <h2 class="text-xl font-bold text-indigo-600 mb-2">
+                <?= htmlspecialchars($course->title) ?>
+            </h2>
+
+            <p class="text-gray-600 text-sm">
+                <?= htmlspecialchars($course->description ?? 'Pas de description') ?>
+            </p>
+
+            <div class="mt-4 text-sm font-semibold text-gray-700">
+                <?= htmlspecialchars($course->total_hours ?? '0') ?> heures
+            </div>
+
+        </div>
+
+        <?php endforeach; ?>
+
+    <?php else: ?>
+
+        <div class="col-span-3 text-center mt-10">
+            <p class="text-red-500 font-semibold text-lg">
+                Aucun cours trouvé
+            </p>
+        </div>
+
+    <?php endif; ?>
 
   </div>
+
+</div>
 
 </body>
 </html>

@@ -2,24 +2,22 @@
 session_start();
 include '../config/db.php';
 
-
+ 
 if (isset($_SESSION['user']['id'])) {
 
-    $role = $_SESSION['user']['label_r'];
-
-    if ($role == 'admin') {
+    if ($_SESSION['user']['role_name'] == 'Admin') {
         header("Location: ../admin/dashboard.php");
         exit;
-    } elseif ($role == 'student') {
+    } elseif ($_SESSION['user']['role_name'] == 'Student') {
         header("Location: ../student/dashboard.php");
         exit;
-    } elseif ($role == 'prof') {
+    } elseif ($_SESSION['user']['role_name'] == 'Professor') {
         header("Location: ../professor/dashboard.php");
         exit;
     }
 }
 
-
+ 
 $messageError = '';
 
 if (isset($_SESSION['messageError'])) {
@@ -27,9 +25,10 @@ if (isset($_SESSION['messageError'])) {
     unset($_SESSION['messageError']);
 }
 
+ 
 if (isset($_POST['login'])) {
 
-    $email = trim($_POST['email']);
+    $email = htmlspecialchars(trim($_POST['email']));
     $password = $_POST['password'];
 
     if (empty($email) || empty($password)) {
@@ -39,9 +38,9 @@ if (isset($_POST['login'])) {
     }
 
     $sqlState = $pdo->prepare("
-        SELECT users.*, roles.label_r
+        SELECT users.*, roles.role_name
         FROM users
-        JOIN roles ON users.role_id = roles.role_id
+        JOIN roles ON users.role_id = roles.id
         WHERE users.email = ?
     ");
 
@@ -51,28 +50,29 @@ if (isset($_POST['login'])) {
     if ($user && password_verify($password, $user->password)) {
 
         $_SESSION['user'] = [
-            'id'        => $user->id_user,   
+            'id'        => $user->id,
             'firstname' => $user->firstname,
             'lastname'  => $user->lastname,
             'email'     => $user->email,
             'role_id'   => $user->role_id,
-            'label_r'   => $user->label_r
+            'role_name' => $user->role_name
         ];
 
- 
-        if ($_SESSION['user']['label_r'] == 'admin') {
+        if ($user->role_name == 'Admin') {
             header("Location: ../admin/dashboard.php");
-        } elseif ($_SESSION['user']['label_r'] == 'student') {
+            exit;
+        } elseif ($user->role_name == 'Student') {
             header("Location: ../student/dashboard.php");
-        } elseif ($_SESSION['user']['label_r'] == 'prof') {
+            exit;
+        } elseif ($user->role_name == 'Professor') {
             header("Location: ../professor/dashboard.php");
+            exit;
         } else {
             session_destroy();
-            $_SESSION['messageError'] = "Role not found";
+            $_SESSION['messageError'] = "Not found Role role";
             header("Location: login.php");
+            exit;
         }
-
-        exit;
 
     } else {
         $_SESSION['messageError'] = "Email ou mot de passe incorrect";
@@ -159,10 +159,8 @@ if (isset($_POST['login'])) {
                             </form>
 
                             <p class="text-center text-muted mt-4 mb-0">
-                                Don't have an account?
-                                <a href="register.php" class="link-primary fw-semibold text-decoration-none">
-                                    Create account
-                                </a>
+                                Don&apos;t have an account?
+                                <a href="register.php" class="link-primary fw-semibold text-decoration-none">Create account</a>
                             </p>
 
                         </div>
