@@ -6,12 +6,16 @@ if (!isset($_SESSION['user']['id'])) {
     header("Location: ../login.php");
     exit();
 }
+$course_id = $_GET['course_id'] ?? null;
 
-$course_id = $_GET['course_id'];
+if (!$course_id) {
+    header("Location: dashboard.php");
+    exit();
+}
 
 $sql = "
 SELECT 
-    enrollments.id,
+    enrollments.id AS enrollment_id,
     users.firstname,
     users.lastname,
     enrollments.status
@@ -26,8 +30,6 @@ $stmt->execute(['course_id' => $course_id]);
 
 $students = $stmt->fetchAll(PDO::FETCH_ASSOC);
 ?>
-
-
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -46,7 +48,25 @@ $students = $stmt->fetchAll(PDO::FETCH_ASSOC);
     <th>Status</th>
     <th>Action</th>
 </tr>
+<?php foreach ($students as $s): ?>
+<tr>
+    <td><?= $s['firstname'] ?> <?= $s['lastname'] ?></td>
+    <td><?= $s['status'] ?></td>
+    <td>
+        <?php if ($s['status'] == 'active'): ?>
+            <a href="update_status.php?id=<?= $s['id'] ?>&status=completed">
+                Mark Completed
+            </a>
+        <?php else: ?>
+            <a href="update_status.php?id=<?= $s['id'] ?>&status=active">
+                Reactivate
+            </a>
+        <?php endif; ?>
+    </td>
+</tr>
+<?php endforeach; ?>
 
+</table>
 
 
 </body>
