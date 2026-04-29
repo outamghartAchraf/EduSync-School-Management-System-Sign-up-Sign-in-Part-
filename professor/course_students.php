@@ -26,3 +26,29 @@ $stmt->execute(['course_id' => $course_id]);
 
 $students = $stmt->fetchAll(PDO::FETCH_ASSOC);
 ?>
+
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Dashboard professeur</title>
+    <script src="https://cdn.jsdelivr.net/npm/@tailwindcss/browser@4"></script>
+</head>
+
+<body class="bg-gray-100 min-h-screen p-6">
+
+<h2>Students</h2>
+
+<table border="1">
+<tr>
+    <th>Name</th>
+    <th>Status</th>
+    <th>Action</th>
+</tr>
+
+
+
+</body>
+
+</html>
