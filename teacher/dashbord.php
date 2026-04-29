@@ -1,3 +1,14 @@
+
+<?php
+session_start();
+require_once '../db.php';
+
+if (!isset($_SESSION['user_id'])) {
+    header("location:../login.php");
+    exit();
+}
+
+
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -28,7 +39,7 @@ Bienvenue <?= $prof['firstname'] ?> <?= $prof['lastname'] ?>
 <td class="border p-2"><?= $class['id']?></td>
 <td class="border p-2"><?= $class['name']?></td>
 <td class="border p-2"><?= $class['classroom_number']?></td>
-
+<td class="border p-2"> < a href="class.php?id= <?= $class['id']?>"> Voir</td>
 
  </tr>
 

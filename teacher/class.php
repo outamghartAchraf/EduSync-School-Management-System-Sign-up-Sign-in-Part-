@@ -9,10 +9,9 @@ exit();
 }
 $professor=$_SESSION['user_id'];
 
-$sql= "SELECT DISTINCT  classes.id, classes.nom, classes.classeroom_number
-from classes
-join courses
-on classes.id =courses.classe_id
+$sql= "SELECT DISTINCT classes.id, classes.name, classes.classroom_number
+FROM classes
+JOIN courses ON classes.id = courses.classe_id
 WHERE courses.prof_id = :prof_id
 ";
 
