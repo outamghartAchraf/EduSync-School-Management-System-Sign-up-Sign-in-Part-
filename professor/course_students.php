@@ -20,3 +20,9 @@ JOIN students ON students.id = enrollments.student_id
 JOIN users ON users.id = students.user_id
 WHERE enrollments.course_id = :course_id
 ";
+
+$stmt = $pdo->prepare($sql);
+$stmt->execute(['course_id' => $course_id]);
+
+$students = $stmt->fetchAll(PDO::FETCH_ASSOC);
+?>
