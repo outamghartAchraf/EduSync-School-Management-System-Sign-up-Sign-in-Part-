@@ -29,55 +29,82 @@ $user = $sqlState->fetch(PDO::FETCH_OBJ);
 <!DOCTYPE html>
 <html lang="fr">
 <head>
-    <meta charset="UTF-8">
-    <title>Profil Étudiant</title>
-    <script src="https://cdn.tailwindcss.com"></script>
+<meta charset="UTF-8">
+<title>profil etudiant</title>
+<script src="https://cdn.tailwindcss.com"></script>
 </head>
 
-<body class="bg-gradient-to-r from-indigo-100 to-purple-100 flex items-center justify-center min-h-screen">
+<body class="bg-gradient-to-br from-indigo-100 via-white to-purple-100 min-h-screen flex items-center justify-center p-6">
 
-<div class="bg-white shadow-2xl rounded-2xl w-[350px] overflow-hidden">
+<div class="max-w-md w-full">
 
-    <?php if ($user): ?>
+<?php if ($user): ?>
 
-    <!-- Header -->
-    <div class="bg-indigo-500 h-24 relative">
-        <div class="absolute -bottom-10 left-1/2 transform -translate-x-1/2">
+<!-- CARD -->
+<div class="bg-white rounded-3xl shadow-xl overflow-hidden">
+
+    <!-- COVER -->
+    <div class="h-32 bg-gradient-to-r from-indigo-500 to-purple-600 relative">
+
+        <!-- Avatar -->
+        <div class="absolute -bottom-12 left-1/2 transform -translate-x-1/2">
             <img 
-                src="https://ui-avatars.com/api/?name=<?= urlencode($user->firstname . ' ' . $user->lastname) ?>&background=ffffff&color=4f46e5"
-                class="w-20 h-20 rounded-full border-4 border-white shadow-md">
+                src="https://ui-avatars.com/api/?name=<?= urlencode($user->firstname . ' ' . $user->lastname) ?>&background=ffffff&color=4f46e5&size=128"
+                class="w-24 h-24 rounded-full border-4 border-white shadow-lg">
         </div>
+
     </div>
 
-    <!-- Content -->
-    <div class="pt-12 pb-6 text-center px-6">
+   
+    <div class="pt-16 pb-6 px-6 text-center">
 
-        <h2 class="text-xl font-bold text-gray-800">
+       
+        <h2 class="text-2xl font-bold text-gray-800">
             <?= htmlspecialchars($user->firstname) ?> <?= htmlspecialchars($user->lastname) ?>
         </h2>
 
-        <p class="text-gray-500 mt-1">
-            <?= htmlspecialchars($user->Email) ?>
+       
+        <p class="text-gray-500 mt-1 text-sm">
+            📧 <?= htmlspecialchars($user->Email) ?>
         </p>
 
-        <div class="mt-4 border-t pt-4 text-sm text-gray-600">
-            <p>
-                <span class="font-semibold">Classe :</span> 
-                <?= $user->class_name ? htmlspecialchars($user->class_name) : 'Pas de classe' ?>
-            </p>
+       
+        <span class="inline-block mt-3 bg-indigo-100 text-indigo-600 px-3 py-1 rounded-full text-xs font-semibold">
+            🎓 etudiant
+        </span>
+
+       
+        <div class="mt-6 grid grid-cols-1 gap-4 text-sm">
+
+            <div class="bg-gray-50 p-4 rounded-xl shadow-sm">
+                <p class="text-gray-500">Classe</p>
+                <p class="font-semibold text-gray-800">
+                    <?= $user->class_name ? htmlspecialchars($user->class_name) : 'Non assignée' ?>
+                </p>
+            </div>
+
+            <div class="bg-gray-50 p-4 rounded-xl shadow-sm">
+                <p class="text-gray-500">ID Étudiant</p>
+                <p class="font-semibold text-indigo-600">
+                    <?= htmlspecialchars($user->student_id ?? '---') ?>
+                </p>
+            </div>
+
         </div>
 
       
 
     </div>
 
-    <?php else: ?>
+</div>
 
-        <div class="p-6 text-center">
-            <p class="text-red-500 font-semibold">Utilisateur non trouvé</p>
-        </div>
+<?php else: ?>
 
-    <?php endif; ?>
+<div class="bg-white p-6 rounded-xl shadow text-center">
+    <p class="text-red-500 font-semibold">Utilisateur non trouve</p>
+</div>
+
+<?php endif; ?>
 
 </div>
 

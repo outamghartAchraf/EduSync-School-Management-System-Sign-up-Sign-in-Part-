@@ -1,21 +1,34 @@
-
 <?php
 session_start();
-$_SESSION['id_class'] = $user['id_class'];
 include '../config/db.php';
 
-$db = new PDO('mysql:host=localhost;dbname=ecole;charset=utf8', 'root', '');
+// Vérifier si connecté
+if (!isset($_SESSION['user'])) {
+    header('Location: ../auth/login.php');
+    exit();
+}
 
-$id_class = $_SESSION['id_class'];
+$id = $_SESSION['user']['id'];
 
-$sql = "SELECT * FROM students WHERE id_class = :id_class";
-$stmt = $db->prepare($sql);
-$stmt->execute(['id_class' => $id_class]);
+// Requête : camarades même classe
+$sql = $pdo->prepare("
+    SELECT 
+        u.firstname,
+        u.lastname,
+        s.student_number
+    FROM students s
+    INNER JOIN users u ON u.id = s.user_id
+    WHERE s.class_id = (
+        SELECT class_id 
+        FROM students 
+        WHERE user_id = ?
+    )
+    AND s.user_id != ?
+");
 
-$students = $stmt->fetchAll();  ?>
-
-
-
+$sql->execute([$id, $id]);
+$students = $sql->fetchAll(PDO::FETCH_OBJ);
+?>
 
 <!DOCTYPE html>
 <html lang="fr">
@@ -31,7 +44,7 @@ $students = $stmt->fetchAll();  ?>
 
     <!-- Titre -->
     <h1 class="text-2xl font-bold text-center mb-6">
-      Liste des etudients 
+      👥 Liste des étudiants
     </h1>
 
     <!-- Card -->
@@ -40,13 +53,38 @@ $students = $stmt->fetchAll();  ?>
       <!-- Liste -->
       <ul class="divide-y">
 
+        <?php if (!empty($students)): ?>
 
-        <li class="p-4 hover:bg-gray-50 font-medium">          
-        <?= htmlspecialchars($students['id_student']) . " " . htmlspecialchars($students['id-class']); ?>
+            <?php foreach ($students as $student): ?>
 
-        </li>
+            <li class="p-4 hover:bg-gray-50 flex justify-between items-center">
 
-        
+                <div>
+                    <p class="font-medium">
+                        <?= htmlspecialchars($student->firstname . ' ' . $student->lastname) ?>
+                    </p>
+
+                    <p class="text-sm text-gray-500">
+                        ID: <?= htmlspecialchars($student->student_number) ?>
+                    </p>
+                </div>
+
+              
+                <span class="bg-indigo-100 text-indigo-600 px-3 py-1 rounded-full text-xs font-semibold">
+                    Student
+                </span>
+
+            </li>
+
+            <?php endforeach; ?>
+
+        <?php else: ?>
+
+            <li class="p-4 text-center text-red-500 font-semibold">
+                Aucun camarade trouvé
+            </li>
+
+        <?php endif; ?>
 
       </ul>
 
