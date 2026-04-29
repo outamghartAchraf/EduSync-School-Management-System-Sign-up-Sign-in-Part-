@@ -159,7 +159,7 @@ if (isset($_POST['login'])) {
                             </form>
 
                             <p class="text-center text-muted mt-4 mb-0">
-                                Don&apos;t have an account?
+                                Don't have an account?
                                 <a href="register.php" class="link-primary fw-semibold text-decoration-none">
                                     Create account
                                 </a>
