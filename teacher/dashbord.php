@@ -7,6 +7,10 @@ if (!isset($_SESSION['user_id'])) {
     header("location:../login.php");
     exit();
 }
+$stmt = $pdo->prepare("SELECT firstname, lastname FROM users WHERE id = ?");
+$stmt->execute([$prof_id]);
+$prof = $stmt->fetch(PDO::FETCH_ASSOC);
+?>
 
 
 <!DOCTYPE html>
