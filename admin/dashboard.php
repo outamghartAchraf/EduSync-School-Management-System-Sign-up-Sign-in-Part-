@@ -3,181 +3,164 @@ session_start();
 include '../config/db.php';
 
 if (!isset($_SESSION['user']['id'])) {
-    header("location: ../auth/login.php");
-    exit;
+  header("location: ../auth/login.php");
+  exit;
 }
 
-// check role
 if ($_SESSION['user']['role_id'] != 1) {
-    header("Location: ../auth/login.php");
-    exit;
+  header("location: ../auth/login.php");
+  exit;
 }
 
-$sqlState = $pdo->query("SELECT 
-(SELECT COUNT(*) FROM students) AS total_students,
-(SELECT COUNT(*) FROM users JOIN roles ON users.role_id = roles.id WHERE roles.role_name = 'Professor') AS total_teachers,
-(SELECT COUNT(*) FROM courses) AS total_courses,
-(SELECT COUNT(*) FROM classes) AS total_classes
+// total students
+$sqlStudents = $pdo->query("SELECT COUNT(*) AS total_students FROM students");
+$totalStudents = $sqlStudents->fetch(PDO::FETCH_OBJ);
+
+// total teachers
+$sqlTeachers = $pdo->query("
+SELECT COUNT(*) AS total_teachers
+FROM users u
+JOIN roles r ON u.role_id = r.id
+WHERE r.role_name = 'Professor'
 ");
-$stats = $sqlState->fetch(PDO::FETCH_OBJ);
+$totalTeachers = $sqlTeachers->fetch(PDO::FETCH_OBJ);
 
-$students = $pdo->query("SELECT students.id, users.firstname, users.lastname, classes.name AS class_name FROM students JOIN users ON students.user_id = users.id JOIN classes ON students.class_id = classes.id ORDER BY students.id DESC LIMIT 5")->fetchAll(PDO::FETCH_OBJ);
+// total courese
+$sqlCourses = $pdo->query("SELECT COUNT(*) AS total_courses FROM courses");
+$totalCourses = $sqlCourses->fetch(PDO::FETCH_OBJ);
 
-$courses = $pdo->query("SELECT id, title, total_hours FROM courses ORDER BY id DESC LIMIT 5")->fetchAll(PDO::FETCH_OBJ);
+// total classes
+$sqlClasses = $pdo->query("SELECT COUNT(*) AS total_classes FROM classes");
+$totalClasses = $sqlClasses->fetch(PDO::FETCH_OBJ);
+
+// students by class 
+$sqlClassStats = $pdo->query("
+SELECT classes.name,
+COUNT(students.id) AS total_students
+FROM classes
+LEFT JOIN students ON students.class_id = classes.id
+GROUP BY classes.id
+");
+
+$classStats = $sqlClassStats->fetchAll(PDO::FETCH_OBJ);
 ?>
 
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>EduSync Dashboard</title>
+
   <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
   <link href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.min.css" rel="stylesheet">
-  
-  <style>
-    body { min-height: 100vh; display: flex; flex-direction: column; }
-     .sidebar {
-      min-width: 240px;
-      max-width: 240px;
-      min-height: 100vh;
-      background: #212529;
-      color: white;
-      position: fixed;
-    }
-    .sidebar .nav-link { color: rgba(255,255,255,0.8); margin-bottom: 5px; }
-    .sidebar .nav-link:hover, .sidebar .nav-link.active { color: white; background: #343a40; border-radius: 5px; }
-    
-     .main-content { margin-left: 240px; width: 100%; }
-    
-    @media (max-width: 768px) {
-      .sidebar { position: relative; min-width: 100%; min-height: auto; }
-      .main-content { margin-left: 0; }
-    }
-  </style>
+  <link rel="stylesheet" href="../assets/css/admin.css">
 </head>
 
 <body class="bg-light">
 
-<div class="d-flex flex-column flex-md-row">
-  
-  <nav class="sidebar p-3 shadow">
-    <a href="index.php" class="d-flex align-items-center mb-4 text-white text-decoration-none">
-      <span class="fs-4 fw-bold">EduSync</span>
-    </a>
-    <hr>
-    <ul class="nav nav-pills flex-column mb-auto">
-      <li class="nav-item">
-        <a href="index.php" class="nav-link active"><i class="bi bi-speedometer2 me-2"></i> Dashboard</a>
-      </li>
-      <li><a href="users.php" class="nav-link"><i class="bi bi-people me-2"></i> Users</a></li>
-      <li><a href="roles.php" class="nav-link"><i class="bi bi-shield-lock me-2"></i> Roles</a></li>
-      <li><a href="students.php" class="nav-link"><i class="bi bi-person-video3 me-2"></i> Students</a></li>
-      <li><a href="classes.php" class="nav-link"><i class="bi bi-building me-2"></i> Classes</a></li>
-      <li><a href="courses.php" class="nav-link"><i class="bi bi-journal-bookmark me-2"></i> Courses</a></li>
-      <li><a href="enrollments.php" class="nav-link"><i class="bi bi-journal-check me-2"></i> Enrollments</a></li>
-    </ul>
-    <hr>
-    <a href="../auth/logout.php" class="nav-link text-danger"><i class="bi bi-box-arrow-right me-2"></i> Logout</a>
-  </nav>
+  <div class="d-flex flex-column flex-md-row">
 
-  <main class="main-content container-fluid py-4">
-    
-    <div class="mb-4">
-      <h2 class="fw-bold">Dashboard Overview</h2>
-      <p class="text-muted">Welcome back, manage your school system efficiently.</p>
-    </div>
+    <?php include 'sidebar.php'; ?>
 
-    <div class="row g-3 mb-4">
-      <div class="col-md-3">
-        <div class="card border-0 shadow-sm p-3">
-          <div class="d-flex justify-content-between align-items-center">
-            <div><h6 class="text-muted">Students</h6><h3 class="fw-bold"><?= $stats->total_students ?></h3></div>
-            <i class="bi bi-people fs-1 text-primary"></i>
-          </div>
-        </div>
-      </div>
-      <div class="col-md-3">
-        <div class="card border-0 shadow-sm p-3">
-          <div class="d-flex justify-content-between align-items-center">
-            <div><h6 class="text-muted">Teachers</h6><h3 class="fw-bold"><?= $stats->total_teachers ?></h3></div>
-            <i class="bi bi-person-badge fs-1 text-success"></i>
-          </div>
-        </div>
-      </div>
-      <div class="col-md-3">
-        <div class="card border-0 shadow-sm p-3">
-          <div class="d-flex justify-content-between align-items-center">
-            <div><h6 class="text-muted">Courses</h6><h3 class="fw-bold"><?= $stats->total_courses ?></h3></div>
-            <i class="bi bi-journal-bookmark fs-1 text-info"></i>
-          </div>
-        </div>
-      </div>
-      <div class="col-md-3">
-        <div class="card border-0 shadow-sm p-3">
-          <div class="d-flex justify-content-between align-items-center">
-            <div><h6 class="text-muted">Classes</h6><h3 class="fw-bold"><?= $stats->total_classes ?></h3></div>
-            <i class="bi bi-building fs-1 text-warning"></i>
-          </div>
-        </div>
-      </div>
-    </div>
+    <main class="main-content container-fluid py-4">
 
-    <div class="row g-3">
-      <div class="col-md-6">
-        <div class="card border-0 shadow-sm">
-          <div class="card-header bg-white border-0 d-flex justify-content-between align-items-center py-3">
-            <h5 class="mb-0">Latest Students</h5>
-            <a href="students.php" class="btn btn-sm btn-outline-primary">View All</a>
+      <div class="mb-4">
+        <h2 class="fw-bold">Dashboard Overview</h2>
+        <p class="text-muted">Welcome back, manage your school system efficiently.</p>
+      </div>
+
+      <div class="row g-3 mb-4">
+
+        <div class="col-md-3">
+          <div class="card border-0 shadow-sm p-3">
+            <div class="d-flex justify-content-between align-items-center">
+              <div>
+                <h6 class="text-muted">Students</h6>
+                <h3 class="fw-bold"><?= $totalStudents->total_students ?></h3>
+              </div>
+              <i class="bi bi-people fs-1 text-primary"></i>
+            </div>
           </div>
-          <div class="card-body p-0">
-            <table class="table table-hover mb-0">
-              <thead class="table-light">
-                <tr><th>#</th><th>Name</th><th>Class</th></tr>
-              </thead>
-              <tbody>
-                <?php foreach ($students as $student): ?>
+        </div>
+
+        <div class="col-md-3">
+          <div class="card border-0 shadow-sm p-3">
+            <div class="d-flex justify-content-between align-items-center">
+              <div>
+                <h6 class="text-muted">Teachers</h6>
+                <h3 class="fw-bold"><?= $totalTeachers->total_teachers ?></h3>
+              </div>
+              <i class="bi bi-person-badge fs-1 text-success"></i>
+            </div>
+          </div>
+        </div>
+
+        <div class="col-md-3">
+          <div class="card border-0 shadow-sm p-3">
+            <div class="d-flex justify-content-between align-items-center">
+              <div>
+                <h6 class="text-muted">Courses</h6>
+                <h3 class="fw-bold"><?= $totalCourses->total_courses ?></h3>
+              </div>
+              <i class="bi bi-journal-bookmark fs-1 text-info"></i>
+            </div>
+          </div>
+        </div>
+
+        <div class="col-md-3">
+          <div class="card border-0 shadow-sm p-3">
+            <div class="d-flex justify-content-between align-items-center">
+              <div>
+                <h6 class="text-muted">Classes</h6>
+                <h3 class="fw-bold"><?= $totalClasses->total_classes ?></h3>
+              </div>
+              <i class="bi bi-building fs-1 text-warning"></i>
+            </div>
+          </div>
+        </div>
+
+      </div>
+
+      <div class="card border-0 shadow-sm">
+        <div class="card-header bg-white border-0 py-3">
+          <h5 class="mb-0">Students Distribution by Class</h5>
+        </div>
+
+        <div class="card-body p-0">
+          <table class="table table-hover mb-0">
+
+            <thead class="table-light">
+              <tr>
+                <th>#</th>
+                <th>Class Name</th>
+                <th>Total Students</th>
+              </tr>
+            </thead>
+
+            <tbody>
+              <?php foreach ($classStats as $index => $row): ?>
                 <tr>
-                  <td><?= $student->id ?></td>
-                  <td><?= $student->firstname . ' ' . $student->lastname ?></td>
-                  <td><span class="badge bg-secondary"><?= $student->class_name ?></span></td>
+                  <td><?= $index + 1 ?></td>
+                  <td><?= $row->name ?></td>
+                  <td>
+                    <span class="badge bg-primary">
+                      <?= $row->total_students ?>
+                    </span>
+                  </td>
                 </tr>
-                <?php endforeach; ?>
-              </tbody>
-            </table>
-          </div>
+              <?php endforeach; ?>
+            </tbody>
+
+          </table>
         </div>
       </div>
 
-      <div class="col-md-6">
-        <div class="card border-0 shadow-sm">
-          <div class="card-header bg-white border-0 d-flex justify-content-between align-items-center py-3">
-            <h5 class="mb-0">Latest Courses</h5>
-            <a href="courses.php" class="btn btn-sm btn-outline-success">View All</a>
-          </div>
-          <div class="card-body p-0">
-            <table class="table table-hover mb-0">
-              <thead class="table-light">
-                <tr><th>#</th><th>Title</th><th>Hours</th></tr>
-              </thead>
-              <tbody>
-                <?php foreach ($courses as $course): ?>
-                <tr>
-                  <td><?= $course->id ?></td>
-                  <td><?= $course->title ?></td>
-                  <td><span class="badge bg-info"><?= $course->total_hours ?>h</span></td>
-                </tr>
-                <?php endforeach; ?>
-              </tbody>
-            </table>
-          </div>
-        </div>
-      </div>
-    </div>
+    </main>
+  </div>
 
-  </main>
-</div>
-
-<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
 </body>
+
 </html>
