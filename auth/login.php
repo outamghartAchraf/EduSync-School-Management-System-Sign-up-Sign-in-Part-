@@ -2,63 +2,87 @@
 session_start();
 include '../config/db.php';
 
+/* =========================
+   If user already logged in
+   ========================= */
 if (isset($_SESSION['user']['id'])) {
 
-    if ($_SESSION['user']['role_id'] == 1) {
+    if ($_SESSION['user']['role_name'] == 'Admin') {
         header("Location: ../admin/dashboard.php");
-    } else if ($_SESSION['user']['role_id'] == 3) {
+        exit;
+    } elseif ($_SESSION['user']['role_name'] == 'Student') {
         header("Location: ../student/dashboard.php");
+        exit;
+    } elseif ($_SESSION['user']['role_name'] == 'Professor') {
+        header("Location: ../professor/dashboard.php");
+        exit;
     }
-
-    exit;
 }
 
+/* =========================
+   Error message handling
+   ========================= */
 $messageError = '';
+
 if (isset($_SESSION['messageError'])) {
     $messageError = $_SESSION['messageError'];
     unset($_SESSION['messageError']);
 }
 
+/* =========================
+   LOGIN PROCESS
+   ========================= */
 if (isset($_POST['login'])) {
-    $email = htmlspecialchars($_POST['email']);
+
+    $email = htmlspecialchars(trim($_POST['email']));
     $password = $_POST['password'];
 
     if (empty($email) || empty($password)) {
-        $_SESSION['messageError'] = "email and password required";
-        header("location: login.php");
+        $_SESSION['messageError'] = "Email and password required";
+        header("Location: login.php");
         exit;
     }
 
-    $sqlState = $pdo->prepare("SELECT * FROM users WHERE email = ?");
+    $sqlState = $pdo->prepare("
+        SELECT users.*, roles.role_name
+        FROM users
+        JOIN roles ON users.role_id = roles.id
+        WHERE users.email = ?
+    ");
+
     $sqlState->execute([$email]);
     $user = $sqlState->fetch(PDO::FETCH_OBJ);
-
 
     if ($user && password_verify($password, $user->password)) {
 
         $_SESSION['user'] = [
-            'id' => $user->id,
+            'id'        => $user->id,
             'firstname' => $user->firstname,
-            'lastname' => $user->lastname,
-            'email' => $user->email,
-            'role_id' => $user->role_id
+            'lastname'  => $user->lastname,
+            'email'     => $user->email,
+            'role_id'   => $user->role_id,
+            'role_name' => $user->role_name
         ];
 
-        if ($user->role_id == 1) {
-            header("location: ../admin/dashboard.php");
+        if ($user->role_name == 'Admin') {
+            header("Location: ../admin/dashboard.php");
             exit;
-        } else if ($user->role_id == 3) {
-            header("location: ../student/dashboard.php");
+        } elseif ($user->role_name == 'Student') {
+            header("Location: ../student/dashboard.php");
+            exit;
+        } elseif ($user->role_name == 'Professor') {
+            header("Location: ../professor/dashboard.php");
+            exit;
+        } else {
+            session_destroy();
+            $_SESSION['messageError'] = "Role not found";
+            header("Location: login.php");
             exit;
         }
-        else if ($user->role_id == 2) {
-            header("location: ../teacher/dashboard.php");
-            exit;
-            }
-    } else {
 
+    } else {
         $_SESSION['messageError'] = "Email ou mot de passe incorrect";
-        header("location: login.php");
+        header("Location: login.php");
         exit;
     }
 }
@@ -76,58 +100,78 @@ if (isset($_POST['login'])) {
 
 <body class="bg-body-secondary vh-100 h-100 m-0 d-flex align-items-center">
 
-    <div class="container h-100">
-        <div class="row justify-content-center align-items-center w-100 h-100">
-            <div class="col-12 col-lg-10 col-xl-9">
-                <div class="card border-0 shadow-lg overflow-hidden">
-                    <div class="row g-0">
-                        <div class="col-md-5 bg-primary text-white p-4 p-lg-5 d-flex flex-column justify-content-center">
-                            <span class="badge rounded-pill text-bg-light text-primary mb-3 w-auto">EduSync Portal</span>
-                            <h1 class="h3 fw-bold mb-3">Welcome Back</h1>
-                            <p class="mb-4">Log in to continue managing your school dashboard and student activities.</p>
-                            <ul class="list-unstyled small mb-0">
-                                <li class="mb-2">- Secure account access</li>
-                                <li class="mb-2">- Fast and simple login</li>
-                                <li>- Built for daily school workflows</li>
-                            </ul>
-                        </div>
+<div class="container h-100">
+    <div class="row justify-content-center align-items-center w-100 h-100">
+        <div class="col-12 col-lg-10 col-xl-9">
 
-                        <div class="col-md-7 bg-white p-4 p-lg-5">
-                            <h2 class="h4 fw-bold mb-1">Login</h2>
-                            <p class="text-muted mb-4">Enter your credentials to continue.</p>
+            <div class="card border-0 shadow-lg overflow-hidden">
+                <div class="row g-0">
 
-                            <?php if ($messageError): ?>
-                                <div class="alert alert-danger"><?= htmlspecialchars($messageError) ?></div>
-                            <?php endif; ?>
+                    <!-- LEFT SIDE -->
+                    <div class="col-md-5 bg-primary text-white p-4 p-lg-5 d-flex flex-column justify-content-center">
 
-                            <form method="POST">
+                        <span class="badge rounded-pill text-bg-light text-primary mb-3 w-auto">
+                            EduSync Portal
+                        </span>
 
-                                <div class="mb-3">
-                                    <label class="form-label">Email</label>
-                                    <input type="email" name="email" class="form-control form-control-lg" placeholder="Email Address"  >
-                                </div>
+                        <h1 class="h3 fw-bold mb-3">Welcome Back</h1>
 
-                                <div class="mb-4">
-                                    <label class="form-label">Password</label>
-                                    <input type="password" name="password" class="form-control form-control-lg" placeholder="Password"  >
-                                </div>
+                        <p class="mb-4">
+                            Log in to continue managing your school dashboard and student activities.
+                        </p>
 
-                                <button type="submit" name="login" class="btn btn-primary btn-lg w-100">Login</button>
-
-                            </form>
-
-                            <p class="text-center text-muted mt-4 mb-0">
-                                Don&apos;t have an account?
-                                <a href="register.php" class="link-primary fw-semibold text-decoration-none">Create account</a>
-                            </p>
-                        </div>
+                        <ul class="list-unstyled small mb-0">
+                            <li class="mb-2">- Secure account access</li>
+                            <li class="mb-2">- Fast and simple login</li>
+                            <li>- Built for daily school workflows</li>
+                        </ul>
                     </div>
+
+                    <!-- RIGHT SIDE -->
+                    <div class="col-md-7 bg-white p-4 p-lg-5">
+
+                        <h2 class="h4 fw-bold mb-1">Login</h2>
+                        <p class="text-muted mb-4">Enter your credentials to continue.</p>
+
+                        <?php if ($messageError): ?>
+                            <div class="alert alert-danger">
+                                <?= htmlspecialchars($messageError) ?>
+                            </div>
+                        <?php endif; ?>
+
+                        <form method="POST">
+
+                            <div class="mb-3">
+                                <label class="form-label">Email</label>
+                                <input type="email" name="email" class="form-control form-control-lg" placeholder="Email Address">
+                            </div>
+
+                            <div class="mb-4">
+                                <label class="form-label">Password</label>
+                                <input type="password" name="password" class="form-control form-control-lg" placeholder="Password">
+                            </div>
+
+                            <button type="submit" name="login" class="btn btn-primary btn-lg w-100">
+                                Login
+                            </button>
+
+                        </form>
+
+                        <p class="text-center text-muted mt-4 mb-0">
+                            Don’t have an account?
+                            <a href="register.php" class="link-primary fw-semibold text-decoration-none">
+                                Create account
+                            </a>
+                        </p>
+
+                    </div>
+
                 </div>
             </div>
+
         </div>
     </div>
-
+</div>
 
 </body>
-
 </html>
