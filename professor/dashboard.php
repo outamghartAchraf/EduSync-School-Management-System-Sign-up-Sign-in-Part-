@@ -73,10 +73,9 @@ echo count($classes);
     <td class="p-3 font-medium"><?= $class['name'] ?></td>
     <td class="p-3"><?= $class['classroom_number'] ?></td>
    <td class="p-3">
-    <a href="course_students.php?course_id=<?= $course['id'] ?>" 
-       class="text-blue-600 hover:underline">
-        Voir étudiants
-    </a>
+    <a href="course_students.php?course_id=<?= $class['id'] ?>">
+    Voir étudiants
+</a>
 </td>
  </tr>
     <?php endforeach; ?> 
