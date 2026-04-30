@@ -24,3 +24,10 @@ if (!$id || !$status) {
     header("Location: dashboard.php");
     exit();
 }
+$sql = "UPDATE enrollments SET status = :status WHERE id = :id";
+
+$stmt = $pdo->prepare($sql);
+$stmt->execute([
+    'status' => $status,
+    'id' => $id
+]);
