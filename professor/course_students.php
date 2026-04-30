@@ -47,10 +47,10 @@ $students = $stmt->fetchAll(PDO::FETCH_ASSOC);
 
 <table class="w-full border-collapse">
 
-<tr class="bg-gray-200 text-left">
-    <th class="p-3">Name</th>
-    <th class="p-3">Status</th>
-    <th class="p-3 text-center">Action</th>
+<tr class="bg-black text-left">
+    <th class="p-3 text-white">Name</th>
+    <th class="p-3 text-white">Status</th>
+    <th class="p-3 text-white text-center">Action</th>
 </tr>
 
 <?php foreach ($students as $s): ?>
@@ -68,14 +68,14 @@ $students = $stmt->fetchAll(PDO::FETCH_ASSOC);
 
 <?php if ($s['status'] == 'active'): ?>
 
-<a href="update_status.php?id=<?= $s['enrollment_id'] ?>&status=completed"
+<a href="modifier_status.php?id=<?= $s['enrollment_id'] ?>&status=completed"
    class="bg-green-500 text-white px-4 py-2 rounded-lg hover:bg-green-600 transition">
    Marquer terminé
 </a>
 
 <?php else: ?>
 
-<a href="update_status.php?id=<?= $s['enrollment_id'] ?>&status=active"
+<a href="modifier_status.php?id=<?= $s['enrollment_id'] ?>&status=active"
    class="bg-blue-500 text-white px-4 py-2 rounded-lg hover:bg-blue-600 transition">
    Reactivate
 </a>
@@ -90,6 +90,12 @@ $students = $stmt->fetchAll(PDO::FETCH_ASSOC);
 </table>
 
 </div>
+</div>
+<div class="max-w-5xl mx-auto mb-4">
+    <a href="dashboard.php"
+       class="inline-block bg-gray-600 text-white px-4 py-2 rounded-lg hover:bg-gray-700 transition">
+        ⬅ Retour Dashboard
+    </a>
 </div>
 
 </body>
