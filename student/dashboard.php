@@ -1,137 +1,101 @@
-
-
 <!DOCTYPE html>
 <html lang="en">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Student Dashboard - EduSync</title>
-    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
-    <link href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.0/font/bootstrap-icons.css" rel="stylesheet">
-    <style>
-        body { min-height: 100vh; background-color: #f8f9fa; }
-        
-        /* Sidebar styling */
-        .sidebar {
-            min-width: 250px;
-            max-width: 250px;
-            background: #0d6efd; /* Primary Color */
-            color: white;
-            min-height: 100vh;
-            position: fixed;
-            transition: all 0.3s;
-            z-index: 1000;
-        }
-
-        .sidebar .nav-link {
-            color: rgba(255, 255, 255, 0.8);
-            padding: 12px 20px;
-            display: flex;
-            align-items: center;
-        }
-
-        .sidebar .nav-link:hover, .sidebar .nav-link.active {
-            color: white;
-            background: rgba(255, 255, 255, 0.1);
-            border-radius: 5px;
-        }
-
-        .sidebar .nav-link i { font-size: 1.2rem; margin-right: 10px; }
-
-        /* Main Content area */
-        .main-content {
-            margin-left: 250px;
-            width: calc(100% - 250px);
-            padding: 20px;
-        }
-
-        /* Responsive adjustments */
-        @media (max-width: 992px) {
-            .sidebar { position: relative; min-width: 100%; max-width: 100%; min-height: auto; }
-            .main-content { margin-left: 0; width: 100%; }
-            .d-flex-container { flex-direction: column; }
-        }
-    </style>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Student Dashboard - EduSync</title>
+<script src="https://cdn.tailwindcss.com"></script>
 </head>
-<body>
 
-<div class="d-flex d-flex-container">
-    <nav class="sidebar p-3 shadow">
-        <div class="d-flex align-items-center mb-4 px-2">
-            <i class="bi bi-mortarboard fs-3 me-2"></i>
-            <span class="fs-4 fw-bold">EduSync</span>
+<body class="bg-gray-100 min-h-screen">
+
+<div class="flex">
+
+    <!-- SIDEBAR -->
+    <aside class="w-64 bg-blue-600 text-white min-h-screen fixed shadow-lg">
+
+        <!-- Logo -->
+        <div class="flex items-center gap-2 px-5 py-4 text-xl font-bold">
+            🎓 EduSync
         </div>
-        <hr class="text-white-50">
-        
-        <ul class="nav nav-pills flex-column mb-auto">
-            <li class="nav-item mb-2">
-                <a href="#dashboard" class="nav-link active">
-                    <i class="bi bi-speedometer2"></i> Dashboard
-                </a>
-            </li>
-            <li class="nav-item mb-2">
-                <a href="myprogramme.php" class="nav-link"><?php   header("myprogramme.php")  ?>
-                    <i class="bi bi-book"></i> Mon Programme
-                </a>
-            </li>
-            <li class="nav-item mb-2">
-                <a href="mapromotion.php" class="nav-link"><?php   header("mapromotion.php")  ?>
-                    <i class="bi bi-journal-check"></i> Mon promotion
-                </a>
-            </li>
-            <li class="nav-item mb-2">
-                <a href="profile.php" class="nav-link"><?php   header("profile.php")  ?>
-                    <i class="bi bi-person-circle"></i> Profile
-                </a>
-            </li>
-            <li class="nav-item mb-2">
-                <a href="details.php" class="nav-link"><?php   header("details.php")  ?>
-                    <i class=""></i> Details
-                </a>
-            </li>
-        </ul>
-        
-        <hr class="text-white-50">
-        <div class="px-2">
-            <div class="small mb-2 text-white-50 text-uppercase">Account</div>
-            <a href="../auth/logout.php" class="nav-link text-warning p-0">
-                <i class="bi bi-box-arrow-right"></i> Logout
+
+        <hr class="border-blue-400">
+
+        <!-- Menu -->
+        <nav class="mt-4 flex flex-col gap-1 px-3">
+
+            <a href="#" class="flex items-center gap-3 px-4 py-2 rounded-md bg-blue-500 font-semibold">
+                📊 Dashboard
+            </a>
+
+            <a href="myprogramme.php" class="flex items-center gap-3 px-4 py-2 rounded-md hover:bg-blue-500 transition">
+                📚 Mon Programme
+            </a>
+
+            <a href="mapromotion.php" class="flex items-center gap-3 px-4 py-2 rounded-md hover:bg-blue-500 transition">
+                🎓 Mon Promotion
+            </a>
+
+            <a href="profile.php" class="flex items-center gap-3 px-4 py-2 rounded-md hover:bg-blue-500 transition">
+                👤 Profile
+            </a>
+
+            <a href="details.php" class="flex items-center gap-3 px-4 py-2 rounded-md hover:bg-blue-500 transition">
+                ℹ️ Details
+            </a>
+
+        </nav>
+
+        <!-- Footer -->
+        <div class="absolute bottom-0 w-full px-5 py-4 border-t border-blue-400">
+            <div class="text-xs uppercase text-blue-200 mb-2">Account</div>
+            <a href="../auth/logout.php" class="flex items-center gap-2 text-yellow-300 hover:text-yellow-400">
+                🚪 Logout
             </a>
         </div>
-    </nav>
 
-    <main class="main-content">
-        <div class="d-flex justify-content-between align-items-center mb-4 pb-3 border-bottom">
+    </aside>
+
+
+    <!-- MAIN CONTENT -->
+    <main class="ml-64 w-full p-6">
+
+        <!-- HEADER -->
+        <div class="flex justify-between items-center mb-6 border-b pb-4">
             <div>
-                <h1 class="h3 fw-bold mb-0">Welcome,   </h1>
-                <p class="text-muted mb-0">Here's your academic overview.</p>
+                <h1 class="text-2xl font-bold text-gray-800">Welcome 👋</h1>
+                <p class="text-gray-500 text-sm">Here's your academic overview.</p>
             </div>
-           
-
-        
-           
         </div>
 
-      
+        <!-- QUICK ACTIONS -->
+        <div class="mt-4">
+            <div class="bg-white shadow rounded-xl p-5">
 
-          
-       
+                <h5 class="font-bold mb-4 text-gray-800">Quick Actions</h5>
 
-        <div class="row g-3 mt-3">
-            <div class="col-12">
-                <div class="card border-0 shadow-sm p-3">
-                    <h5 class="fw-bold mb-3">Quick Actions</h5>
-                    <div class="d-flex flex-wrap gap-2">
-                        <button class="btn btn-outline-primary btn-sm"><i class="bi bi-download"></i> Materials</button>
-                        <button class="btn btn-outline-success btn-sm"><i class="bi bi-upload"></i> Submit</button>
-                        <button class="btn btn-outline-info btn-sm"><i class="bi bi-chat"></i> Message</button>
-                    </div>
+                <div class="flex flex-wrap gap-3">
+
+                    <button class="border border-blue-500 text-blue-600 px-4 py-2 rounded-lg text-sm hover:bg-blue-500 hover:text-white transition">
+                        ⬇️ Materials
+                    </button>
+
+                    <button class="border border-green-500 text-green-600 px-4 py-2 rounded-lg text-sm hover:bg-green-500 hover:text-white transition">
+                        ⬆️ Submit
+                    </button>
+
+                    <button class="border border-cyan-500 text-cyan-600 px-4 py-2 rounded-lg text-sm hover:bg-cyan-500 hover:text-white transition">
+                        💬 Message
+                    </button>
+
                 </div>
+
             </div>
         </div>
+
     </main>
+
 </div>
 
-<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
 </body>
 </html>

@@ -2,14 +2,12 @@
 session_start();
 include '../config/db.php';
 
-
 if (!isset($_SESSION['user'])) {
     header('Location: ../auth/login.php');
     exit();
 }
 
 $id = $_SESSION['user']['id'];
-
 
 $sqlState = $pdo->prepare("
     SELECT 
@@ -30,57 +28,113 @@ $courses = $sqlState->fetchAll(PDO::FETCH_OBJ);
 <!DOCTYPE html>
 <html lang="fr">
 <head>
-  <meta charset="UTF-8">
-  <title>Mes matières</title>
-  <script src="https://cdn.tailwindcss.com"></script>
+<meta charset="UTF-8">
+<title>Mes matières</title>
+<script src="https://cdn.tailwindcss.com"></script>
 </head>
 
-<body class="bg-gradient-to-r from-indigo-100 to-purple-100 min-h-screen p-6">
+<body class="bg-gray-100">
 
-<div class="max-w-6xl mx-auto">
+<div class="flex">
 
-  <div class="flex justify-between items-center mb-8">
-    <h1 class="text-3xl font-bold text-gray-800">📚 Mes matières</h1>
+   
+    <aside class="w-64 bg-blue-600 text-white min-h-screen fixed shadow-lg flex flex-col">
 
-    
-  </div>
+     
+        <div class="px-6 py-5 text-2xl font-bold border-b border-blue-400">
+            🎓 EduSync
+        </div>
 
- 
-  <div class="grid sm:grid-cols-2 lg:grid-cols-3 gap-6">
+   
+        <nav class="flex flex-col mt-4 px-3 space-y-1">
 
-    <?php if (!empty($courses)): ?>
+            <a href="dashboard.php"
+               class="px-4 py-2 rounded-lg hover:bg-blue-500 transition">
+                📊 Dashboard
+            </a>
 
-        <?php foreach($courses as $course): ?>
+            <a href="myprogramme.php"
+               class="px-4 py-2 rounded-lg bg-blue-500 font-semibold">
+                📚 Mes matières
+            </a>
 
-        <div class="bg-white p-5 rounded-2xl shadow hover:shadow-xl transition duration-300">
+            <a href="mapromotion.php"
+               class="px-4 py-2 rounded-lg hover:bg-blue-500 transition">
+                👥 Camarades
+            </a>
 
-            <h2 class="text-xl font-bold text-indigo-600 mb-2">
-                <?= htmlspecialchars($course->title) ?>
-            </h2>
+            <a href="profile.php"
+               class="px-4 py-2 rounded-lg hover:bg-blue-500 transition">
+                👤 Profile
+            </a>
 
-            <p class="text-gray-600 text-sm">
-                <?= htmlspecialchars($course->description ?? 'Pas de description') ?>
-            </p>
+            <a href="details.php"
+               class="px-4 py-2 rounded-lg hover:bg-blue-500 transition">
+                ℹ️ Details
+            </a>
 
-            <div class="mt-4 text-sm font-semibold text-gray-700">
-                <?= htmlspecialchars($course->total_hours ?? '0') ?> heures
+        </nav>
+
+       
+        <div class="mt-auto px-6 py-4 border-t border-blue-400">
+            <a href="../auth/logout.php"
+               class="text-yellow-300 hover:text-yellow-400 flex items-center gap-2">
+                🚪 Logout
+            </a>
+        </div>
+
+    </aside>
+
+
+   
+    <main class="ml-64 w-full p-6">
+
+        <div class="max-w-6xl mx-auto">
+
+            <div class="flex justify-between items-center mb-8">
+                <h1 class="text-3xl font-bold text-gray-800">📚 Mes matières</h1>
+            </div>
+
+          
+            <div class="grid sm:grid-cols-2 lg:grid-cols-3 gap-6">
+
+                <?php if (!empty($courses)): ?>
+
+                    <?php foreach($courses as $course): ?>
+
+                    <div class="bg-white p-5 rounded-2xl shadow hover:shadow-xl transition">
+
+                        <h2 class="text-xl font-bold text-indigo-600 mb-2">
+                            <?= htmlspecialchars($course->title) ?>
+                        </h2>
+
+                        <p class="text-gray-600 text-sm">
+                            <?= htmlspecialchars($course->description ?? 'Pas de description') ?>
+                        </p>
+
+                        <div class="mt-4 text-sm font-semibold text-gray-700">
+                            ⏱ <?= htmlspecialchars($course->total_hours ?? '0') ?> heures
+                        </div>
+
+                    </div>
+
+                    <?php endforeach; ?>
+
+                <?php else: ?>
+
+                    <div class="col-span-3 text-center mt-10">
+                        <p class="text-red-500 font-semibold text-lg">
+                            Aucun cours trouvé
+                        </p>
+                    </div>
+
+                <?php endif; ?>
+
             </div>
 
         </div>
 
-        <?php endforeach; ?>
-
-    <?php else: ?>
-
-        <div class="col-span-3 text-center mt-10">
-            <p class="text-red-500 font-semibold text-lg">
-                Aucun cours trouvé
-            </p>
-        </div>
-
-    <?php endif; ?>
-
-  </div>
+    </main>
 
 </div>
 
