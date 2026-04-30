@@ -30,7 +30,7 @@ $user = $sqlState->fetch(PDO::FETCH_OBJ);
 <html lang="fr">
 <head>
 <meta charset="UTF-8">
-<title>Profil Étudiant</title>
+<title>Profil etudiant</title>
 <script src="https://cdn.tailwindcss.com"></script>
 </head>
 
@@ -46,23 +46,23 @@ $user = $sqlState->fetch(PDO::FETCH_OBJ);
         <nav class="space-y-3">
 
             <a href="dashboard.php" class="flex items-center gap-3 p-2 rounded-lg hover:bg-indigo-500 transition">
-                📊 <span>Dashboard</span>
+                <span>Dashboard</span>
             </a>
 
             <a href="myprogramme.php" class="flex items-center gap-3 p-2 rounded-lg hover:bg-indigo-500 transition">
-                📚 <span>Mon Programme</span>
+                <span>Mon Programm</span>
             </a>
 
             <a href="mapromotion.php" class="flex items-center gap-3 p-2 rounded-lg hover:bg-indigo-500 transition">
-                🎓 <span>Promotion</span>
+                 <span>Promotion</span>
             </a>
 
             <a href="profile.php" class="flex items-center gap-3 p-2 rounded-lg bg-indigo-500">
-                👤 <span>Profile</span>
+                <span>Profile</span>
             </a>
 
             <a href="details.php" class="flex items-center gap-3 p-2 rounded-lg hover:bg-indigo-500 transition">
-                ℹ️ <span>Details</span>
+                 <span>Details</span>
             </a>
 
         </nav>
@@ -104,11 +104,11 @@ $user = $sqlState->fetch(PDO::FETCH_OBJ);
                 </h2>
 
                 <p class="text-gray-500 mt-1 text-sm">
-                    📧 <?= htmlspecialchars($user->Email) ?>
+                     <?= htmlspecialchars($user->Email) ?>
                 </p>
 
                 <span class="inline-block mt-3 bg-indigo-100 text-indigo-600 px-3 py-1 rounded-full text-xs font-semibold">
-                    🎓 Étudiant
+                    etudiant
                 </span>
 
                 <div class="mt-6 space-y-3 text-sm">
@@ -121,7 +121,7 @@ $user = $sqlState->fetch(PDO::FETCH_OBJ);
                     </div>
 
                     <div class="bg-gray-50 p-4 rounded-xl shadow-sm">
-                        <p class="text-gray-500">ID Étudiant</p>
+                        <p class="text-gray-500">ID etudiant</p>
                         <p class="font-semibold text-indigo-600">
                             <?= $user->student_id ?? '---' ?>
                         </p>
@@ -136,7 +136,7 @@ $user = $sqlState->fetch(PDO::FETCH_OBJ);
         <?php else: ?>
 
         <div class="bg-white p-6 rounded-xl shadow text-center">
-            <p class="text-red-500 font-semibold">Utilisateur non trouvé</p>
+            <p class="text-red-500 font-semibold">Utilisateur non trouve</p>
         </div>
 
         <?php endif; ?>

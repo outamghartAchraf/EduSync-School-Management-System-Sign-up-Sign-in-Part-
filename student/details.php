@@ -29,7 +29,7 @@ $courses = $sqlState->fetchAll(PDO::FETCH_OBJ);
 <html lang="fr">
 <head>
 <meta charset="UTF-8">
-<title>Mes matières</title>
+<title>Mes matires</title>
 <script src="https://cdn.tailwindcss.com"></script>
 </head>
 
@@ -42,7 +42,7 @@ $courses = $sqlState->fetchAll(PDO::FETCH_OBJ);
 
      
         <div class="px-6 py-5 text-2xl font-bold border-b border-blue-400">
-            🎓 EduSync
+             EduSync
         </div>
 
    
@@ -50,27 +50,27 @@ $courses = $sqlState->fetchAll(PDO::FETCH_OBJ);
 
             <a href="dashboard.php"
                class="px-4 py-2 rounded-lg hover:bg-blue-500 transition">
-                📊 Dashboard
+                 Dashboard
             </a>
 
             <a href="myprogramme.php"
                class="px-4 py-2 rounded-lg bg-blue-500 font-semibold">
-                📚 Mes matières
+                 Mes matières
             </a>
 
             <a href="mapromotion.php"
                class="px-4 py-2 rounded-lg hover:bg-blue-500 transition">
-                👥 Camarades
+                 Camarades
             </a>
 
             <a href="profile.php"
                class="px-4 py-2 rounded-lg hover:bg-blue-500 transition">
-                👤 Profile
+                 Profile
             </a>
 
             <a href="details.php"
                class="px-4 py-2 rounded-lg hover:bg-blue-500 transition">
-                ℹ️ Details
+                Details
             </a>
 
         </nav>
@@ -79,7 +79,7 @@ $courses = $sqlState->fetchAll(PDO::FETCH_OBJ);
         <div class="mt-auto px-6 py-4 border-t border-blue-400">
             <a href="../auth/logout.php"
                class="text-yellow-300 hover:text-yellow-400 flex items-center gap-2">
-                🚪 Logout
+                 Logout
             </a>
         </div>
 
@@ -92,7 +92,7 @@ $courses = $sqlState->fetchAll(PDO::FETCH_OBJ);
         <div class="max-w-6xl mx-auto">
 
             <div class="flex justify-between items-center mb-8">
-                <h1 class="text-3xl font-bold text-gray-800">📚 Mes matières</h1>
+                <h1 class="text-3xl font-bold text-gray-800">📚 Mes matieres</h1>
             </div>
 
           
@@ -113,7 +113,7 @@ $courses = $sqlState->fetchAll(PDO::FETCH_OBJ);
                         </p>
 
                         <div class="mt-4 text-sm font-semibold text-gray-700">
-                            ⏱ <?= htmlspecialchars($course->total_hours ?? '0') ?> heures
+                             <?= htmlspecialchars($course->total_hours ?? '0') ?> heures
                         </div>
 
                     </div>
@@ -124,7 +124,7 @@ $courses = $sqlState->fetchAll(PDO::FETCH_OBJ);
 
                     <div class="col-span-3 text-center mt-10">
                         <p class="text-red-500 font-semibold text-lg">
-                            Aucun cours trouvé
+                            Aucun cours trouve
                         </p>
                     </div>
 

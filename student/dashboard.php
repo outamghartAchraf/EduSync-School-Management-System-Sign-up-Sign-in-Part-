@@ -50,7 +50,7 @@
         <div class="absolute bottom-0 w-full px-5 py-4 border-t border-blue-400">
             <div class="text-xs uppercase text-blue-200 mb-2">Account</div>
             <a href="../auth/logout.php" class="flex items-center gap-2 text-yellow-300 hover:text-yellow-400">
-                🚪 Logout
+                 Logout
             </a>
         </div>
 
@@ -63,7 +63,7 @@
         <!-- HEADER -->
         <div class="flex justify-between items-center mb-6 border-b pb-4">
             <div>
-                <h1 class="text-2xl font-bold text-gray-800">Welcome 👋</h1>
+                <h1 class="text-2xl font-bold text-gray-800">Welcome </h1>
                 <p class="text-gray-500 text-sm">Here's your academic overview.</p>
             </div>
         </div>
@@ -77,15 +77,15 @@
                 <div class="flex flex-wrap gap-3">
 
                     <button class="border border-blue-500 text-blue-600 px-4 py-2 rounded-lg text-sm hover:bg-blue-500 hover:text-white transition">
-                        ⬇️ Materials
+                        Materials
                     </button>
 
                     <button class="border border-green-500 text-green-600 px-4 py-2 rounded-lg text-sm hover:bg-green-500 hover:text-white transition">
-                        ⬆️ Submit
+                        Submit
                     </button>
 
                     <button class="border border-cyan-500 text-cyan-600 px-4 py-2 rounded-lg text-sm hover:bg-cyan-500 hover:text-white transition">
-                        💬 Message
+                        Message
                     </button>
 
                 </div>

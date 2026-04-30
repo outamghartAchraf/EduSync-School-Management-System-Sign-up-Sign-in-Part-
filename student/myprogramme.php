@@ -45,7 +45,7 @@ $courses = $sql->fetchAll(PDO::FETCH_OBJ);
     <aside class="w-64 bg-blue-600 text-white min-h-screen fixed shadow-lg">
 
         <div class="px-5 py-4 text-xl font-bold">
-            🎓 EduSync
+            EduSync
         </div>
 
         <hr class="border-blue-400">
@@ -53,31 +53,31 @@ $courses = $sql->fetchAll(PDO::FETCH_OBJ);
         <nav class="mt-4 flex flex-col gap-1 px-3">
 
             <a href="dashboard.php" class="px-4 py-2 rounded-md hover:bg-blue-500">
-                📊 Dashboard
+                Dashboard
             </a>
 
             <!-- ACTIVE -->
             <a href="myprogramme.php" class="px-4 py-2 rounded-md bg-blue-500 font-semibold">
-                📚 Mon Programme
+                Mon Programme
             </a>
 
             <a href="mapromotion.php" class="px-4 py-2 rounded-md hover:bg-blue-500">
-                🎓 Promotion
+                Promotion
             </a>
 
             <a href="profile.php" class="px-4 py-2 rounded-md hover:bg-blue-500">
-                👤 Profile
+                 Profile
             </a>
 
             <a href="details.php" class="px-4 py-2 rounded-md hover:bg-blue-500">
-                ℹ️ Details
+                Details
             </a>
 
         </nav>
 
         <div class="absolute bottom-0 w-full px-5 py-4 border-t border-blue-400">
             <a href="../auth/logout.php" class="text-yellow-300 hover:text-yellow-400">
-                🚪 Logout
+                 Logout
             </a>
         </div>
 
