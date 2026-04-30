@@ -52,6 +52,8 @@ try {
         <nav class="space-y-4">
             <a href="mycourses.php" class="block p-3 rounded hover:bg-slate-800 transition"> Mes Cours</a>
             <a href="students_list.php" class="block p-3 rounded bg-blue-700"> Étudiants</a>
+             <a href="../professor/dashboard.php" class="block py-2.5 px-4 rounded hover:bg-slate-800 text-white">dashboard</a>
+
             <hr class="border-slate-700 my-4">
             <a href="../auth/logout.php" class="block p-3 rounded hover:bg-red-600 transition">Logout</a>
         </nav>
