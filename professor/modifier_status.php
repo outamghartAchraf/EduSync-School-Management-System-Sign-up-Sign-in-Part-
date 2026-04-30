@@ -31,3 +31,7 @@ $stmt->execute([
     'status' => $status,
     'id' => $id
 ]);
+
+
+header("Location: " . $_SERVER['HTTP_REFERER']);
+exit();
