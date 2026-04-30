@@ -31,14 +31,14 @@ $classes = $stmt->fetchAll(PDO::FETCH_ASSOC);
 <head>
     <meta charset="UTF-8">
     <title>Dashboard professeur - EduSync</title>
-    <!-- استعملت السطر اللي عطيتيني ديال Tailwind -->
+    
     <script src="https://cdn.jsdelivr.net/npm/@tailwindcss/browser@4"></script>
 </head>
 
-<!-- زدت flex باش يجي Sidebar حدا المحتوى -->
+
 <body class="bg-gray-100 min-h-screen flex">
 
-    <!-- 1. SIDEBAR (اللي عطيتيني) -->
+  
     <aside class="w-64 bg-slate-900 min-h-screen text-white p-4 hidden md:block sticky top-0">
         <h2 class="text-xl font-bold text-blue-400 mb-8 px-2">EduSync Prof</h2>
         <nav class="space-y-2">
