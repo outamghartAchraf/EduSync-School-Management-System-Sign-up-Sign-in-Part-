@@ -19,3 +19,8 @@ if (isset($_GET['status'])) {
 } else {
     $status = null;
 }
+
+if (!$id || !$status) {
+    header("Location: dashboard.php");
+    exit();
+}
