@@ -31,6 +31,7 @@ try {
         <h2 class="text-xl font-bold text-blue-400 mb-8 px-2">EduSync Prof</h2>
         <nav class="space-y-2">
             <a href="mycourses.php" class="block py-2.5 px-4 rounded bg-blue-600 text-white">📚 Mes Cours</a>
+            <a href="../professor/student_list.php" class="block py-2.5 px-4 rounded hover:bg-slate-800 text-white">list de Etudients</a>
             <a href="../auth/logout.php" class="block py-2.5 px-4 rounded hover:bg-red-600 transition">Logout</a>
         </nav>
     </aside>
