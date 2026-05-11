@@ -3,6 +3,11 @@ session_start();
 require_once '../config/db.php';
 
 
+if (!isset($_SESSION['user']['id'])) {
+    header("location: ../auth/login.php");
+    exit;
+}
+
 
 $prof_id = $_SESSION['user']['id'];
 
